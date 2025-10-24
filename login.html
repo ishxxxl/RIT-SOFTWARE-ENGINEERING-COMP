@@ -39,3 +39,45 @@
             background-color: #273c75;
             color: white;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #40739e;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>NeedsConnect Login</h2>
+        <div class="error" id="error-msg">Invalid username or password</div>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            // Hardcoded demo credentials
+            if(username === "user" && password === "pass123") {
+                alert("Login successful! Welcome to NeedsConnect.");
+                errorMsg.style.display = "none";
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
