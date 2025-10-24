@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>LogIn</title>
+    <title>needsconnect Project</title>
 </head>
 <body>
-
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
+    <h1>Hello, GitHub!</h1>
+    <p>This is my first HTML page.</p>
 </body>
 </html>
