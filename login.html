@@ -126,18 +126,39 @@
     </div>
 
     <script>
+        function togglePassword() {
+            const passField = document.getElementById('password');
+            passField.type = passField.type === 'password' ? 'text' : 'password';
+        }
         function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const password = document.getElementById('password').value.trim();
+            const remember = document.getElementById('rememberMe').checked;
             const errorMsg = document.getElementById('error-msg');
 
-            if(username === "user" && password === "pass123") {
-                alert("Login successful! Welcome to NeedsConnect.");
-                errorMsg.style.display = "none";
-            } else {
+            if (!username || !password) {
+                errorMsg.textContent = "Please fill in both fields.";
                 errorMsg.style.display = "block";
+                return;
+            }
+            if (username === "admin") {
+                alert("Welcome, U-Fund Manager (Admin)! Access granted.");
+                errorMsg.style.display = "none";
+                if (remember) localStorage.setItem("user", "admin");
+            } 
+            else {
+                alert("Welcome, Helper! You’re now logged in.");
+                errorMsg.style.display = "none";
+                if (remember) localStorage.setItem("user", username);
+            }
+        }
+        window.onload = function() {
+            const savedUser = localStorage.getItem("user");
+            if (savedUser) {
+                alert(`Welcome back, ${savedUser === "admin" ? "U-Fund Manager" : "Helper"}!`);
             }
         }
     </script>
+    <footer>© 2025 NeedsConnect | Empowering Communities</footer>
 </body>
 </html>
