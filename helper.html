@@ -10,11 +10,10 @@
       margin: 0;
       padding: 0;
       color: white;
-      background-image: url('LoginBackground.jpg'); /* use your file name */
-      background-size: cover;        /* makes it fill the screen */
-      background-position: center;   /* centers the image */
-      background-repeat: no-repeat;  /* prevents tiling */
-      background-attachment: fixed;  /* keeps it fixed when scrolling */
+      background: rgba(0, 0, 0, 0.5) url('./LoginBackground.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-blend-mode: darken; /* makes text readable even with bright images */
+      text-align: center;
     }
     
     header {
