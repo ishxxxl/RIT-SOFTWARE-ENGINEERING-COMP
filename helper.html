@@ -2,24 +2,221 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Helper Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helper Dashboard - NeedsConnect</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #3ac569, #00a86b);
       color: white;
-      text-align: center;
-      padding-top: 100px;
+      margin: 0;
+      padding: 0;
     }
-    a {
+
+    header {
+      background-color: rgba(0,0,0,0.2);
+      padding: 15px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+    }
+
+    #welcome-section {
+      text-align: center;
+      padding: 50px 20px 20px 20px;
+    }
+
+    #welcome-section h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    #welcome-section p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    #welcome-section a {
       color: #fff;
       text-decoration: underline;
+      font-size: 18px;
+    }
+
+    #search-bar {
+      width: 80%;
+      padding: 10px;
+      margin: 20px auto;
+      display: block;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    #needs-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 10px;
+      color: black;
+    }
+
+    .need-card {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 250px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      color: black;
+    }
+
+    .need-card h3 {
+      margin: 5px 0;
+    }
+
+    .need-card button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .need-card button.remove {
+      background-color: red;
+    }
+
+    #basket {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background-color: #ff9900;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    #basket-count {
+      background-color: white;
+      color: #ff9900;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 5px;
+    }
+
+    #checkout-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #checkout-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: black;
+    }
+
+    #checkout-content button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome, Helper 🌿</h1>
-  <p>Thank you for being part of NeedsConnect!</p>
-  <a href="index.html">Logout</a>
+  <header>NeedsConnect - Helper Dashboard</header>
+
+  <div id="welcome-section">
+    <h1>Welcome, Helper 🌿</h1>
+    <p>Thank you for being part of NeedsConnect!</p>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <input type="text" id="search-bar" placeholder="Search needs...">
+
+  <div id="needs-list">
+    <!-- Example need cards -->
+    <div class="need-card">
+      <h3>School Supplies</h3>
+      <p>Children in need of basic school items.</p>
+      <button>Add to Basket</button>
+    </div>
+    <div class="need-card">
+      <h3>Food Packs</h3>
+      <p>Provide food for families in need.</p>
+      <button>Add to Basket</button>
+    </div>
+    <div class="need-card">
+      <h3>Medical Aid</h3>
+      <p>Help provide medicines for patients.</p>
+      <button>Add to Basket</button>
+    </div>
+  </div>
+
+  <div id="basket">
+    Basket <span id="basket-count">0</span>
+  </div>
+
+  <div id="checkout-modal">
+    <div id="checkout-content">
+      <h2>Checkout</h2>
+      <p>Proceed with funding the selected needs.</p>
+      <button id="close-checkout">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const basket = document.getElementById('basket');
+    const basketCount = document.getElementById('basket-count');
+    const checkoutModal = document.getElementById('checkout-modal');
+    const closeCheckout = document.getElementById('close-checkout');
+    let count = 0;
+
+    document.querySelectorAll('.need-card button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        count++;
+        basketCount.textContent = count;
+      });
+    });
+
+    basket.addEventListener('click', () => {
+      checkoutModal.style.display = 'flex';
+    });
+
+    closeCheckout.addEventListener('click', () => {
+      checkoutModal.style.display = 'none';
+    });
+
+    // Optional: Search functionality
+    const searchBar = document.getElementById('search-bar');
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      document.querySelectorAll('.need-card').forEach(card => {
+        const text = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = text.includes(query) ? 'block' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>
