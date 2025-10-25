@@ -135,21 +135,26 @@
             const password = document.getElementById('password').value.trim();
             const remember = document.getElementById('rememberMe').checked;
             const errorMsg = document.getElementById('error-msg');
-
+            
             if (!username || !password) {
                 errorMsg.textContent = "Please fill in both fields.";
                 errorMsg.style.display = "block";
                 return;
             }
+            errorMsg.style.display = "none";
+            
             if (username === "admin") {
-                alert("Welcome, U-Fund Manager (Admin)! Access granted.");
-                errorMsg.style.display = "none";
+                alert("Welcome, U-Fund Manager! Redirecting to your dashboard...");
                 if (remember) localStorage.setItem("user", "admin");
-            } 
-            else {
+                setTimeout(() => {
+                    window.location.href = "manager.html";  // Redirects admin
+                }, 1000);
+            } else {
                 alert("Welcome, Helper! You’re now logged in.");
-                errorMsg.style.display = "none";
                 if (remember) localStorage.setItem("user", username);
+                setTimeout(() => {
+                    window.location.href = "helper.html";  // Redirects helper
+                }, 1000);
             }
         }
         window.onload = function() {
