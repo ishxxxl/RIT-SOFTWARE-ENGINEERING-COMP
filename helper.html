@@ -214,18 +214,65 @@
   </div>
 
   <script>
+    const needs = [
+      { title: "School Supplies", desc: "Children in need of basic school items." },
+      { title: "Food Packs", desc: "Provide food for families in need." },
+      { title: "Medical Aid", desc: "Help provide medicines for patients." },
+      { title: "Clean Water", desc: "Install water filters in rural communities." },
+      { title: "Clothing Drive", desc: "Winter clothes for those without shelter." },
+      { title: "Women Empowerment", desc: "Support training programs for women." },
+      { title: "Elderly Care", desc: "Fund home visits and medication." },
+      { title: "Disaster Relief", desc: "Assist families impacted by natural disasters." },
+      { title: "Orphan Support", desc: "Provide daily meals for orphaned children." },
+      { title: "Education Grants", desc: "Help underprivileged students continue school." },
+      { title: "Hospital Equipment", desc: "Fund ventilators and essential medical gear." },
+      { title: "Refugee Support", desc: "Help displaced families with basic needs." },
+      { title: "Sanitation Kits", desc: "Provide hygiene kits to rural communities." },
+      { title: "Skill Training", desc: "Vocational training for unemployed youth." },
+      { title: "Animal Rescue", desc: "Aid in the rescue and care of stray animals." },
+      { title: "Reforestation", desc: "Plant trees in affected forest regions." },
+      { title: "Wheelchair Donation", desc: "Help the disabled gain mobility." },
+      { title: "Books for All", desc: "Donate books to underfunded schools." },
+      { title: "Mental Health Awareness", desc: "Support counseling programs." },
+      { title: "Solar Lamps", desc: "Provide light for homes without electricity." },
+    ];
+
+    const needsList = document.getElementById('needs-list');
     const basket = document.getElementById('basket');
     const basketCount = document.getElementById('basket-count');
+    const showMoreBtn = document.getElementById('show-more');
     const checkoutModal = document.getElementById('checkout-modal');
     const closeCheckout = document.getElementById('close-checkout');
-    let count = 0;
 
-    document.querySelectorAll('.need-card button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        count++;
-        basketCount.textContent = count;
+    let count = 0;
+    let displayed = 0;
+    const batchSize = 20;
+
+    function displayNeeds() {
+      const slice = needs.slice(displayed, displayed + batchSize);
+      slice.forEach(need => {
+        const card = document.createElement('div');
+        card.classList.add('need-card');
+        card.innerHTML = `
+          <h3>${need.title}</h3>
+          <p>${need.desc}</p>
+          <button>Add to Basket</button>
+        `;
+        needsList.appendChild(card);
+
+        card.querySelector('button').addEventListener('click', () => {
+          count++;
+          basketCount.textContent = count;
+        });
       });
-    });
+
+      displayed += slice.length;
+      if (displayed >= needs.length) showMoreBtn.style.display = 'none';
+    }
+
+    displayNeeds();
+
+    showMoreBtn.addEventListener('click', displayNeeds);
 
     basket.addEventListener('click', () => {
       checkoutModal.style.display = 'flex';
@@ -235,7 +282,7 @@
       checkoutModal.style.display = 'none';
     });
 
-    // Optional: Search functionality
+    // Search functionality
     const searchBar = document.getElementById('search-bar');
     searchBar.addEventListener('input', () => {
       const query = searchBar.value.toLowerCase();
