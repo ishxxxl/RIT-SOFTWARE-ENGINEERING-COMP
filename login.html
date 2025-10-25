@@ -114,6 +114,16 @@
         <div class="error" id="error-msg">Invalid username or password</div>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+            <span class="show-pass" onclick="togglePassword()">👁️</span>
+        </div>
+        <div class="remember">
+            <input type="checkbox" id="rememberMe"> Remember me
+        </div>
         <button onclick="login()">Login</button>
     </div>
 
