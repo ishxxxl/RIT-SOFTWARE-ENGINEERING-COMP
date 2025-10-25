@@ -18,81 +18,93 @@
     }
     
     header {
-      background-color: rgba(0,0,0,0.2);
-      padding: 15px;
-      text-align: center;
-      font-size: 28px;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      font-size: 30px;
       font-weight: bold;
       color: white;
     }
-    
+
     #welcome-section {
-      text-align: center;
-      padding: 50px 20px 20px 20px;
+      margin-top: 30px;
     }
 
     #welcome-section h1 {
       font-size: 36px;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
     #welcome-section p {
-      font-size: 20px;
-      margin-bottom: 20px;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     #welcome-section a {
-      color: #fff;
-      text-decoration: underline;
-      font-size: 18px;
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: bold;
     }
 
     #search-bar {
-      width: 80%;
-      padding: 10px;
-      margin: 20px auto;
+      width: 50%;
+      padding: 12px 20px;
+      margin: 30px auto;
       display: block;
-      border-radius: 5px;
       border: none;
-      font-size: 16px;
+      border-bottom: 3px solid #fff;
+      background: transparent;
+      color: white;
+      font-size: 18px;
+      outline: none;
+      text-align: center;
     }
 
     #needs-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-      padding: 10px;
-      color: black;
+      gap: 20px;
+      padding: 20px;
     }
 
     .need-card {
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: black;
+      border-radius: 12px;
       width: 250px;
       padding: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       text-align: center;
-      color: black;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .need-card:hover {
+      transform: translateY(-5px);
     }
 
     .need-card h3 {
-      margin: 5px 0;
+      margin-bottom: 8px;
+      color: #0077cc;
+    }
+
+    .need-card p {
+      font-size: 15px;
+      color: #333;
     }
 
     .need-card button {
       background-color: #0077cc;
       color: white;
       border: none;
-      padding: 8px 10px;
-      border-radius: 5px;
+      padding: 10px 15px;
+      border-radius: 6px;
       cursor: pointer;
       margin-top: 10px;
+      transition: background 0.2s;
     }
 
-    .need-card button.remove {
-      background-color: red;
+    .need-card button:hover {
+      background-color: #005fa3;
     }
 
     #basket {
@@ -101,17 +113,19 @@
       right: 15px;
       background-color: #ff9900;
       color: white;
-      padding: 10px 15px;
+      padding: 10px 20px;
       border-radius: 25px;
       cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
     }
 
     #basket-count {
       background-color: white;
       color: #ff9900;
       font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 10px;
+      padding: 3px 8px;
+      border-radius: 8px;
       margin-left: 5px;
     }
 
@@ -122,14 +136,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
     }
 
     #checkout-content {
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: 10px;
       width: 90%;
       max-width: 400px;
@@ -141,7 +155,7 @@
       background-color: #0077cc;
       color: white;
       border: none;
-      padding: 10px 15px;
+      padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 15px;
