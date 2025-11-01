@@ -11,9 +11,9 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
     .request-container {
       background-color: rgba(255, 255, 255, 0.95);
@@ -22,6 +22,7 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
       width: 400px;
       text-align: center;
+      margin-top: 20px;
     }
     h2 {
       color: #006b3c;
@@ -49,9 +50,27 @@
     button:hover {
       background: #009e63;
     }
+    .my-requests {
+      width: 400px;
+      margin-top: 20px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+    .my-requests h3 {
+      margin-top: 0;
+      color: #006b3c;
+    }
+    .request-item {
+      border-bottom: 1px solid #ccc;
+      padding: 8px 0;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
+
   <div class="request-container">
     <h2>Request a Need</h2>
     <input type="text" id="needName" placeholder="Name of the Need">
@@ -66,6 +85,11 @@
     <button onclick="submitNeed()">Submit Request</button>
   </div>
 
+  <div class="my-requests">
+    <h3>My Requests</h3>
+    <div id="requestsList">No requests yet.</div>
+  </div>
+
   <script>
     function submitNeed() {
       const name = document.getElementById('needName').value.trim();
@@ -77,16 +101,41 @@
         return;
       }
 
-      // Save in localStorage (temporary storage)
+      // Save in localStorage
       let requests = JSON.parse(localStorage.getItem('requests') || '[]');
       requests.push({name, category, description: desc});
       localStorage.setItem('requests', JSON.stringify(requests));
 
       alert("Your need has been requested successfully!");
+
+      // Clear input fields
       document.getElementById('needName').value = '';
       document.getElementById('category').value = '';
       document.getElementById('description').value = '';
+
+      renderRequests(); // Refresh the request list
     }
+
+    function renderRequests() {
+      const requestsList = document.getElementById('requestsList');
+      let requests = JSON.parse(localStorage.getItem('requests') || '[]');
+      if (requests.length === 0) {
+        requestsList.innerHTML = "No requests yet.";
+        return;
+      }
+
+      requestsList.innerHTML = "";
+      requests.forEach((r, index) => {
+        const div = document.createElement('div');
+        div.className = 'request-item';
+        div.innerHTML = `<strong>${r.name}</strong> (${r.category})<br>${r.description}`;
+        requestsList.appendChild(div);
+      });
+    }
+
+    // Render requests when page loads
+    window.onload = renderRequests;
   </script>
+
 </body>
 </html>
