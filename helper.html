@@ -26,6 +26,10 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      header .logo {
+      height: 55px;          /* adjust height depending on your logo */
+      width: auto;           /* keeps the aspect ratio */
+      object-fit: contain;   /* prevents distortion */
     }
 
     header h1 {
@@ -179,7 +183,7 @@
 </head>
 <body>
   <header>
-    <h1>NeedsConnect</h1>
+    <img src="newlogo.jpg" alt="NeedsConnect Logo" class="logo">
     <button onclick="logout()">Logout</button>
   </header>
 
