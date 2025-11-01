@@ -27,7 +27,25 @@
       z-index: 100;
     }
 
-    header h1 { margin: 0; font-size: 24px; font-weight: 600; color: #005e4b; }
+    header h1 {
+      margin: 0; 
+      font-size: 24px; 
+      font-weight: 600; 
+      color: #005e4b; 
+    }
+
+    header .logo img {
+      height: 45px;          /* adjust the logo size as needed */
+      width: auto;
+      display: block;
+    }
+    
+    header .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    
     header button {
       background: #007f6b;
       color: white;
@@ -113,7 +131,9 @@
 </head>
 <body>
   <header>
-    <h1>NeedsConnect</h1>
+    <a href="index.html" class="logo">
+      <img src="newlogo.jpg" alt="NeedsConnect Logo">
+    </a>
     <button onclick="checkoutBasket()">Checkout Basket</button>
   </header>
 
