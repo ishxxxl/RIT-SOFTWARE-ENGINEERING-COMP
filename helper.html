@@ -14,6 +14,7 @@
       display: flex;
       flex-direction: column;
     }
+
     header {
       background: #ffffff;
       padding: 20px 40px;
@@ -25,16 +26,19 @@
       top: 0;
       z-index: 100;
     }
+
     header .header-buttons {
       display: flex;
       gap: 10px;
     }
+
     header h1 {
       margin: 0; 
-      font-size: 24px; 
+      font-size: 28px; 
       font-weight: 600; 
       color: #005e4b; 
     }
+
     header button {
       background: #007f6b;
       color: white;
@@ -64,6 +68,7 @@
       cursor: pointer;
       transition: 0.3s;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .category-menu button.active, .category-menu button:hover { background: #005e4b; }
 
@@ -72,13 +77,17 @@
       gap: 20px;
       margin-bottom: 40px;
     }
+
     .main-need {
       flex: 2;
       position: relative;
       cursor: pointer;
+      height: 400px;
     }
     .main-need img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 10px;
       display: block;
     }
@@ -89,37 +98,43 @@
       width: 100%;
       background: rgba(0,0,0,0.4);
       color: white;
-      padding: 10px;
+      padding: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       opacity: 0;
       transition: opacity 0.3s;
       border-radius: 0 0 10px 10px;
+      font-size: 18px;
     }
     .main-need:hover .overlay { opacity: 1; }
     .main-need .overlay button {
       background: #00a86b;
       border: none;
-      padding: 8px 12px;
+      padding: 10px 16px;
       border-radius: 5px;
       cursor: pointer;
       color: white;
+      font-size: 16px;
     }
+
     .other-needs {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 200px);
       gap: 10px;
       position: relative;
     }
     .other-needs .need-card {
       position: relative;
       cursor: pointer;
+      height: 100%;
     }
     .other-needs .need-card img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 10px;
       display: block;
     }
@@ -130,7 +145,7 @@
       width: 100%;
       background: rgba(0,0,0,0.4);
       color: white;
-      padding: 6px;
+      padding: 8px;
       opacity: 0;
       display: flex;
       justify-content: space-between;
@@ -173,7 +188,7 @@
       z-index: 200;
     }
     .donation-modal.active { right: 20px; }
-    .donation-modal h3 { margin-top: 0; }
+    .donation-modal h3 { margin-top: 0; font-size: 20px; }
     .donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
     .donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
     .donation-modal .preset-btns button {
@@ -190,9 +205,9 @@
       overflow-y: auto; padding: 20px;
     }
     .viewmore-modal.active { display: flex; }
-    .viewmore-content { background: white; padding: 20px; border-radius: 10px; max-width: 800px; width: 100%; }
+    .viewmore-content { background: white; padding: 20px; border-radius: 10px; max-width: 900px; width: 100%; }
     .viewmore-content h3 { margin-top: 0; margin-bottom: 15px; }
-    .viewmore-list { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 15px; }
+    .viewmore-list { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 15px; }
     .viewmore-list .need-card img { width: 100%; border-radius: 8px; display: block; }
     .viewmore-list .need-card .overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.4); color: white; padding: 6px; opacity: 0; display: flex; justify-content: space-between; align-items: center; transition: opacity 0.3s; border-radius: 0 0 8px 8px; font-size: 14px; }
     .viewmore-list .need-card:hover .overlay { opacity: 1; }
@@ -201,179 +216,176 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>NeedsConnect</h1>
-    <div class="header-buttons">
-      <button onclick="checkoutBasket()">Checkout Basket</button>
-      <button onclick="logout()">Logout</button>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="category-menu" id="categoryMenu"></div>
-    <div class="needs-top">
-      <div class="main-need" id="mainNeed"></div>
-      <div class="other-needs" id="otherNeeds"></div>
-    </div>
+<header>
+  <h1>NeedsConnect</h1>
+  <div class="header-buttons">
+    <button onclick="checkoutBasket()">Checkout Basket</button>
+    <button onclick="logout()">Logout</button>
   </div>
+</header>
 
-  <footer>© 2025 NeedsConnect | Empowering Communities</footer>
-
-  <!-- Donation modal -->
-  <div class="donation-modal" id="donationModal">
-    <h3 id="donationTitle">Donate</h3>
-    <label>Select Amount:</label>
-    <div class="preset-btns">
-      <button onclick="setAmount(5)">$5</button>
-      <button onclick="setAmount(10)">$10</button>
-      <button onclick="setAmount(20)">$20</button>
-    </div>
-    <label>Or custom amount:</label>
-    <input type="number" id="customAmount" min="1" max="1000" placeholder="Max $1000">
-    <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
+<div class="container">
+  <div class="category-menu" id="categoryMenu"></div>
+  <div class="needs-top">
+    <div class="main-need" id="mainNeed"></div>
+    <div class="other-needs" id="otherNeeds"></div>
   </div>
+</div>
 
-  <!-- View more modal -->
-  <div class="viewmore-modal" id="viewmoreModal">
-    <div class="viewmore-content">
-      <h3 id="viewmoreTitle">Category</h3>
-      <div class="viewmore-list" id="viewmoreList"></div>
-    </div>
+<footer>© 2025 NeedsConnect | Empowering Communities</footer>
+
+<!-- Donation modal -->
+<div class="donation-modal" id="donationModal">
+  <h3 id="donationTitle">Donate</h3>
+  <label>Select Amount:</label>
+  <div class="preset-btns">
+    <button onclick="setAmount(5)">$5</button>
+    <button onclick="setAmount(10)">$10</button>
+    <button onclick="setAmount(20)">$20</button>
   </div>
+  <label>Or custom amount:</label>
+  <input type="number" id="customAmount" min="1" max="1000" placeholder="Max $1000">
+  <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
+</div>
 
-  <script>
-    const categories = {
-      "Education": [
-        {name: "School Supplies", img: "https://picsum.photos/400/300?random=1"},
-        {name: "Books for Kids", img: "https://picsum.photos/400/300?random=2"},
-        {name: "Scholarship Fund", img: "https://picsum.photos/400/300?random=3"},
-        {name: "Online Learning Tools", img: "https://picsum.photos/400/300?random=4"},
-        {name: "Tutoring Sessions", img: "https://picsum.photos/400/300?random=5"}
-      ],
-      "Urgent Needs": [
-        {name: "Food for Families", img: "https://picsum.photos/400/300?random=6"},
-        {name: "Medical Aid", img: "https://picsum.photos/400/300?random=7"},
-        {name: "Shelter Kits", img: "https://picsum.photos/400/300?random=8"},
-        {name: "Emergency Clothing", img: "https://picsum.photos/400/300?random=9"},
-        {name: "Clean Water", img: "https://picsum.photos/400/300?random=10"}
-      ],
-      "Health": [
-        {name: "Vaccination Drive", img: "https://picsum.photos/400/300?random=11"},
-        {name: "Elderly Care", img: "https://picsum.photos/400/300?random=12"},
-        {name: "Mental Health Support", img: "https://picsum.photos/400/300?random=13"},
-        {name: "Medical Supplies", img: "https://picsum.photos/400/300?random=14"},
-        {name: "Health Awareness Campaign", img: "https://picsum.photos/400/300?random=15"}
-      ]
-    };
+<!-- View more modal -->
+<div class="viewmore-modal" id="viewmoreModal">
+  <div class="viewmore-content">
+    <h3 id="viewmoreTitle">Category</h3>
+    <div class="viewmore-list" id="viewmoreList"></div>
+  </div>
+</div>
 
-    let basket = [];
-    let currentItem = null;
-    let donationAmount = 0;
-    let activeCategory = Object.keys(categories)[0];
+<script>
+const categories = {
+  "Education": [
+    {name: "School Supplies", img: "https://plus.unsplash.com/premium_photo-1663127374925-56558b81cd38?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170"},
+    {name: "Books for Kids", img: "https://source.unsplash.com/800x600/?books,children"},
+    {name: "Scholarship Fund", img: "https://source.unsplash.com/800x600/?scholarship"},
+    {name: "Online Learning Tools", img: "https://source.unsplash.com/800x600/?online,learning"},
+    {name: "Tutoring Sessions", img: "https://source.unsplash.com/800x600/?tutoring"}
+  ],
+  "Urgent Needs": [
+    {name: "Food for Families", img: "https://source.unsplash.com/800x600/?food"},
+    {name: "Medical Aid", img: "https://source.unsplash.com/800x600/?medical"},
+    {name: "Shelter Kits", img: "https://source.unsplash.com/800x600/?shelter"},
+    {name: "Emergency Clothing", img: "https://source.unsplash.com/800x600/?clothes"},
+    {name: "Clean Water", img: "https://source.unsplash.com/800x600/?water"}
+  ],
+  "Health": [
+    {name: "Vaccination Drive", img: "https://source.unsplash.com/800x600/?vaccination"},
+    {name: "Elderly Care", img: "https://source.unsplash.com/800x600/?elderly,care"},
+    {name: "Mental Health Support", img: "https://source.unsplash.com/800x600/?mental,health"},
+    {name: "Medical Supplies", img: "https://source.unsplash.com/800x600/?medicine"},
+    {name: "Health Awareness Campaign", img: "https://source.unsplash.com/800x600/?health"}
+  ]
+};
 
-    const donationModal = document.getElementById("donationModal");
-    const donationTitle = document.getElementById("donationTitle");
-    const customAmount = document.getElementById("customAmount");
-    const mainNeedDiv = document.getElementById("mainNeed");
-    const otherNeedsDiv = document.getElementById("otherNeeds");
-    const categoryMenuDiv = document.getElementById("categoryMenu");
-    const viewmoreModal = document.getElementById("viewmoreModal");
-    const viewmoreTitle = document.getElementById("viewmoreTitle");
-    const viewmoreList = document.getElementById("viewmoreList");
+let basket = [];
+let currentItem = null;
+let donationAmount = 0;
+let activeCategory = Object.keys(categories)[0];
 
-    function logout() { alert("Logging out"); }
+const donationModal = document.getElementById("donationModal");
+const donationTitle = document.getElementById("donationTitle");
+const customAmount = document.getElementById("customAmount");
+const mainNeedDiv = document.getElementById("mainNeed");
+const otherNeedsDiv = document.getElementById("otherNeeds");
+const categoryMenuDiv = document.getElementById("categoryMenu");
+const viewmoreModal = document.getElementById("viewmoreModal");
+const viewmoreTitle = document.getElementById("viewmoreTitle");
+const viewmoreList = document.getElementById("viewmoreList");
 
-    function renderCategories() {
-      categoryMenuDiv.innerHTML = "";
-      Object.keys(categories).forEach(cat => {
-        const btn = document.createElement("button");
-        btn.textContent = cat;
-        if (cat === activeCategory) btn.classList.add("active");
-        btn.onclick = () => { activeCategory = cat; renderNeeds(); renderCategories(); };
-        categoryMenuDiv.appendChild(btn);
-      });
-    }
+function logout() { alert("Logging out"); }
 
-    function renderNeeds() {
-      const needs = categories[activeCategory];
-      mainNeedDiv.innerHTML = `
-        <img src="${needs[0].img}" alt="${needs[0].name}">
-        <div class="overlay">
-          <span>${needs[0].name}</span>
-          <button onclick="openDonation('${needs[0].name}')">Donate</button>
-        </div>
-      `;
-      otherNeedsDiv.innerHTML = "";
-      for (let i = 1; i <= 4; i++) {
-        const n = needs[i];
-        const div = document.createElement("div");
-        div.className = "need-card";
-        div.innerHTML = `
-          <img src="${n.img}" alt="${n.name}">
-          <div class="overlay">
-            <span>${n.name}</span>
-            <button onclick="openDonation('${n.name}')">Donate</button>
-          </div>
-        `;
-        otherNeedsDiv.appendChild(div);
-      }
+function renderCategories() {
+  categoryMenuDiv.innerHTML = "";
+  Object.keys(categories).forEach(cat => {
+    const btn = document.createElement("button");
+    btn.textContent = cat;
+    if (cat === activeCategory) btn.classList.add("active");
+    btn.onclick = () => { activeCategory = cat; renderNeeds(); renderCategories(); };
+    categoryMenuDiv.appendChild(btn);
+  });
+}
 
-      // Add View More
-      const vm = document.createElement("div");
-      vm.className = "view-more-btn";
-      vm.textContent = "View More ➔";
-      vm.onclick = () => openViewMore(activeCategory);
-      otherNeedsDiv.appendChild(vm);
-    }
+function renderNeeds() {
+  const needs = categories[activeCategory];
+  mainNeedDiv.innerHTML = `
+    <img src="${needs[0].img}" alt="${needs[0].name}">
+    <div class="overlay">
+      <span>${needs[0].name}</span>
+      <button onclick="openDonation('${needs[0].name}')">Donate</button>
+    </div>
+  `;
+  otherNeedsDiv.innerHTML = "";
+  for (let i = 1; i <= 4; i++) {
+    const n = needs[i];
+    const div = document.createElement("div");
+    div.className = "need-card";
+    div.innerHTML = `
+      <img src="${n.img}" alt="${n.name}">
+      <div class="overlay">
+        <span>${n.name}</span>
+        <button onclick="openDonation('${n.name}')">Donate</button>
+      </div>
+    `;
+    otherNeedsDiv.appendChild(div);
+  }
+  // View More
+  const vm = document.createElement("div");
+  vm.className = "view-more-btn";
+  vm.textContent = "View More ➔";
+  vm.onclick = () => openViewMore(activeCategory);
+  otherNeedsDiv.appendChild(vm);
+}
 
-    function openDonation(name) {
-      currentItem = name;
-      donationTitle.textContent = `Donate to "${name}"`;
-      customAmount.value = "";
-      donationAmount = 0;
-      donationModal.classList.add("active");
-    }
+function openDonation(name) {
+  currentItem = name;
+  donationTitle.textContent = `Donate to "${name}"`;
+  customAmount.value = "";
+  donationAmount = 0;
+  donationModal.classList.add("active");
+}
 
-    function setAmount(val) {
-      donationAmount = val;
-      customAmount.value = val;
-    }
+function setAmount(val) {
+  donationAmount = val;
+  customAmount.value = val;
+}
 
-    function confirmDonation() {
-      let amount = parseFloat(customAmount.value);
-      if (isNaN(amount) || amount < 1) return alert("Enter a valid amount.");
-      if (amount > 1000) amount = 1000;
-      donationAmount = amount;
-      basket.push({ name: currentItem, amount: donationAmount });
-      donationModal.classList.remove("active");
-      alert(`"${currentItem}" added to basket, fund amount: $${donationAmount}`);
-      currentItem = null;
-    }
+function confirmDonation() {
+  let amount = parseFloat(customAmount.value);
+  if (isNaN(amount) || amount < 1) return alert("Enter a valid amount.");
+  if (amount > 1000) amount = 1000;
+  donationAmount = amount;
+  basket.push({ name: currentItem, amount: donationAmount });
+  donationModal.classList.remove("active");
+  alert(`"${currentItem}" added to basket, fund amount: $${donationAmount}`);
+  currentItem = null;
+}
 
-    function openViewMore(category) {
-      viewmoreTitle.textContent = category;
-      viewmoreList.innerHTML = "";
-      categories[category].forEach(n => {
-        const div = document.createElement("div");
-        div.className = "need-card";
-        div.innerHTML = `
-          <img src="${n.img}" alt="${n.name}">
-          <div class="overlay">
-            <span>${n.name}</span>
-            <button onclick="openDonation('${n.name}')">Donate</button>
-          </div>
-        `;
-        viewmoreList.appendChild(div);
-      });
-      viewmoreModal.classList.add("active");
-    }
+function openViewMore(category) {
+  viewmoreTitle.textContent = category;
+  viewmoreList.innerHTML = "";
+  categories[category].forEach(n => {
+    const div = document.createElement("div");
+    div.className = "need-card";
+    div.innerHTML = `
+      <img src="${n.img}" alt="${n.name}">
+      <div class="overlay">
+        <span>${n.name}</span>
+        <button onclick="openDonation('${n.name}')">Donate</button>
+      </div>
+    `;
+    viewmoreList.appendChild(div);
+  });
+  viewmoreModal.classList.add("active");
+}
 
-    viewmoreModal.onclick = (e) => {
-      if (e.target === viewmoreModal) viewmoreModal.classList.remove("active");
-    }
+viewmoreModal.onclick = (e) => { if (e.target === viewmoreModal) viewmoreModal.classList.remove("active"); }
 
-    renderCategories();
-    renderNeeds();
-  </script>
+renderCategories();
+renderNeeds();
+</script>
 </body>
 </html>
