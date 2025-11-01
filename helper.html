@@ -30,6 +30,16 @@
       height: 55px;          /* adjust height depending on your logo */
       width: auto;           /* keeps the aspect ratio */
       object-fit: contain;   /* prevents distortion */
+      /* Logo styling fix */
+      .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    header .logo {
+      height: 60px;          /* Adjust as needed */
+      width: auto;
+      object-fit: contain;
     }
 
     header h1 {
@@ -182,11 +192,14 @@
   </style>
 </head>
 <body>
+  
   <header>
-    <img src="newlogo.jpg" alt="NeedsConnect Logo" class="logo">
+    <div class="logo-container">
+      <img src="logo.png" alt="NeedsConnect Logo" class="logo">
+    </div>
     <button onclick="logout()">Logout</button>
   </header>
-
+  
   <div class="container">
     <div class="search-box">
       <input type="text" id="search" placeholder="Search needs...">
