@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Request a Need - NeedsConnect</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url("DashboardBackground.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .request-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      width: 400px;
+      text-align: center;
+    }
+    h2 {
+      color: #006b3c;
+      margin-bottom: 20px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00a86b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #009e63;
+    }
+  </style>
+</head>
+<body>
+  <div class="request-container">
+    <h2>Request a Need</h2>
+    <input type="text" id="needName" placeholder="Name of the Need">
+    <select id="category">
+      <option value="">Select Category</option>
+      <option value="Education">Education</option>
+      <option value="Health">Health</option>
+      <option value="Relief">Relief</option>
+      <option value="Infrastructure">Infrastructure</option>
+    </select>
+    <textarea id="description" rows="4" placeholder="Description of the need"></textarea>
+    <button onclick="submitNeed()">Submit Request</button>
+  </div>
+
+  <script>
+    function submitNeed() {
+      const name = document.getElementById('needName').value.trim();
+      const category = document.getElementById('category').value;
+      const desc = document.getElementById('description').value.trim();
+
+      if (!name || !category || !desc) {
+        alert("Please fill out all fields!");
+        return;
+      }
+
+      // Save in localStorage (temporary storage)
+      let requests = JSON.parse(localStorage.getItem('requests') || '[]');
+      requests.push({name, category, description: desc});
+      localStorage.setItem('requests', JSON.stringify(requests));
+
+      alert("Your need has been requested successfully!");
+      document.getElementById('needName').value = '';
+      document.getElementById('category').value = '';
+      document.getElementById('description').value = '';
+    }
+  </script>
+</body>
+</html>
