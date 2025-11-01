@@ -2,294 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Helper Dashboard - NeedsConnect</title>
+  <title>NeedsConnect - Helper Dashboard</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #3ac569, #00a86b);
       margin: 0;
       padding: 0;
-      background: rgba(0, 0, 0, 0.5) url('newback.jpg');
-      background-size: cover;
-      background-blend-mode: darken; /* makes text readable even with bright images */
-      text-align: center;
-    }
-    
-    header {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      font-size: 30px;
-      font-weight: bold;
-      color: white;
-    }
-
-    #welcome-section {
-      margin-top: 30px;
-    }
-
-    #welcome-section h1 {
-      font-size: 36px;
-      margin-bottom: 5px;
-    }
-
-    #welcome-section p {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    #welcome-section a {
-      color: #ffd700;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #search-bar {
-      width: 50%;
-      padding: 12px 20px;
-      margin: 30px auto;
-      display: block;
-      border: none;
-      border-bottom: 3px solid #fff;
-      background: transparent;
-      color: white;
-      font-size: 18px;
-      outline: none;
-      text-align: center;
-    }
-
-    #needs-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .need-card {
-      background-color: rgba(255, 255, 255, 0.9);
-      color: black;
-      border-radius: 12px;
-      width: 250px;
-      padding: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      text-align: center;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .need-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .need-card h3 {
-      margin-bottom: 8px;
-      color: #0077cc;
-    }
-
-    .need-card p {
-      font-size: 15px;
       color: #333;
     }
-
-    .need-card button {
-      background-color: #0077cc;
+    header {
+      background-color: rgba(255,255,255,0.9);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    header h1 {
+      color: #006b3c;
+      margin: 0;
+    }
+    header button {
+      background: #00a86b;
       color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.2s;
-    }
-
-    .need-card button:hover {
-      background-color: #005fa3;
-    }
-
-    #basket {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background-color: #ff9900;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    }
-
-    #basket-count {
-      background-color: white;
-      color: #ff9900;
-      font-weight: bold;
-      padding: 3px 8px;
+      padding: 10px 16px;
       border-radius: 8px;
-      margin-left: 5px;
+      cursor: pointer;
     }
-
-    #checkout-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
+    .container {
+      padding: 20px 40px;
+    }
+    .search-box {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
     }
-
-    #checkout-content {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      color: black;
+    .search-box input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
-
-    #checkout-content button {
-      background-color: #0077cc;
+    .needs-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .need-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: 0.3s;
+    }
+    .need-card:hover {
+      transform: translateY(-4px);
+    }
+    .need-card h3 {
+      margin-top: 0;
+      color: #006b3c;
+    }
+    .need-card button {
+      margin-top: 10px;
+      background: #00a86b;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
+      padding: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 15px;
+      width: 100%;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      background: rgba(0,0,0,0.2);
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <header>NeedsConnect - Helper Dashboard</header>
+  <header>
+    <h1>Helper Dashboard</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
 
-  <div id="welcome-section">
-    <h1>Welcome, Helper 🌿</h1>
-    <p>Thank you for taking interest in the wellbeing of others!</p>
-    <a href="index.html">Logout</a>
-  </div>
-
-  <input type="text" id="search-bar" placeholder="Search needs...">
-
-  <div id="needs-list"></div>
-
-  <!-- Show More button -->
-  <div style="margin: 30px;">
-    <button id="show-more" style="
-      background-color: #ff9900;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background 0.3s;">
-      Show More
-    </button>
-  </div>
-  
-    <div class="need-card">
-      <h3>Food Packs</h3>
-      <p>Provide food for families in need.</p>
-      <button>Add to Basket</button>
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search for needs...">
+      <button onclick="checkout()">Checkout Basket 🛒</button>
     </div>
-    <div class="need-card">
-      <h3>Medical Aid</h3>
-      <p>Help provide medicines for patients.</p>
-      <button>Add to Basket</button>
-    </div>
+
+    <div class="needs-list" id="needsList"></div>
   </div>
 
-  <div id="basket">
-    Basket <span id="basket-count">0</span>
-  </div>
-
-  <div id="checkout-modal">
-    <div id="checkout-content">
-      <h2>Checkout</h2>
-      <p>Proceed with funding the selected needs.</p>
-      <button id="close-checkout">Close</button>
-    </div>
-  </div>
+  <footer>© 2025 NeedsConnect | Empowering Communities</footer>
 
   <script>
     const needs = [
-      { title: "School Supplies", desc: "Children in need of basic school items." },
-      { title: "Food Packs", desc: "Provide food for families in need." },
-      { title: "Medical Aid", desc: "Help provide medicines for patients." },
-      { title: "Clean Water", desc: "Install water filters in rural communities." },
-      { title: "Clothing Drive", desc: "Winter clothes for those without shelter." },
-      { title: "Women Empowerment", desc: "Support training programs for women." },
-      { title: "Elderly Care", desc: "Fund home visits and medication." },
-      { title: "Disaster Relief", desc: "Assist families impacted by natural disasters." },
-      { title: "Orphan Support", desc: "Provide daily meals for orphaned children." },
-      { title: "Education Grants", desc: "Help underprivileged students continue school." },
-      { title: "Hospital Equipment", desc: "Fund ventilators and essential medical gear." },
-      { title: "Refugee Support", desc: "Help displaced families with basic needs." },
-      { title: "Sanitation Kits", desc: "Provide hygiene kits to rural communities." },
-      { title: "Skill Training", desc: "Vocational training for unemployed youth." },
-      { title: "Animal Rescue", desc: "Aid in the rescue and care of stray animals." },
-      { title: "Reforestation", desc: "Plant trees in affected forest regions." },
-      { title: "Wheelchair Donation", desc: "Help the disabled gain mobility." },
-      { title: "Books for All", desc: "Donate books to underfunded schools." },
-      { title: "Mental Health Awareness", desc: "Support counseling programs." },
-      { title: "Solar Lamps", desc: "Provide light for homes without electricity." },
+      { name: "School Supplies for Kids", category: "Education" },
+      { name: "Food for Refugee Families", category: "Relief" },
+      { name: "Medical Aid for Elderly", category: "Health" },
+      { name: "Clean Water Project", category: "Infrastructure" },
     ];
 
-    const needsList = document.getElementById('needs-list');
-    const basket = document.getElementById('basket');
-    const basketCount = document.getElementById('basket-count');
-    const showMoreBtn = document.getElementById('show-more');
-    const checkoutModal = document.getElementById('checkout-modal');
-    const closeCheckout = document.getElementById('close-checkout');
+    const basket = [];
 
-    let count = 0;
-    let displayed = 0;
-    const batchSize = 20;
-
-    function displayNeeds() {
-      const slice = needs.slice(displayed, displayed + batchSize);
-      slice.forEach(need => {
-        const card = document.createElement('div');
-        card.classList.add('need-card');
-        card.innerHTML = `
-          <h3>${need.title}</h3>
-          <p>${need.desc}</p>
-          <button>Add to Basket</button>
-        `;
-        needsList.appendChild(card);
-
-        card.querySelector('button').addEventListener('click', () => {
-          count++;
-          basketCount.textContent = count;
+    function renderNeeds(filter = "") {
+      const list = document.getElementById("needsList");
+      list.innerHTML = "";
+      needs
+        .filter(n => n.name.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(n => {
+          const div = document.createElement("div");
+          div.className = "need-card";
+          div.innerHTML = `
+            <h3>${n.name}</h3>
+            <p>Category: ${n.category}</p>
+            <button onclick="addToBasket('${n.name}')">Add to Basket</button>
+          `;
+          list.appendChild(div);
         });
-      });
-
-      displayed += slice.length;
-      if (displayed >= needs.length) showMoreBtn.style.display = 'none';
     }
 
-    displayNeeds();
+    function addToBasket(name) {
+      if (!basket.includes(name)) basket.push(name);
+      alert(name + " added to basket!");
+    }
 
-    showMoreBtn.addEventListener('click', displayNeeds);
+    function checkout() {
+      if (basket.length === 0) {
+        alert("Your basket is empty!");
+        return;
+      }
+      alert("You have funded: " + basket.join(", "));
+      basket.length = 0;
+    }
 
-    basket.addEventListener('click', () => {
-      checkoutModal.style.display = 'flex';
+    function logout() {
+      localStorage.removeItem("user");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("search").addEventListener("input", e => {
+      renderNeeds(e.target.value);
     });
 
-    closeCheckout.addEventListener('click', () => {
-      checkoutModal.style.display = 'none';
-    });
-
-    // Search functionality
-    const searchBar = document.getElementById('search-bar');
-    searchBar.addEventListener('input', () => {
-      const query = searchBar.value.toLowerCase();
-      document.querySelectorAll('.need-card').forEach(card => {
-        const text = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = text.includes(query) ? 'block' : 'none';
-      });
-    });
+    renderNeeds();
   </script>
 </body>
 </html>
