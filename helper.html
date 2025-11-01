@@ -2,193 +2,211 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NeedsConnect - Helper Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>NeedsConnect ‑ Helper Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* 🌿 General Page Styling */
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #00b37e, #3ac569);
       margin: 0;
       padding: 0;
+      font-family: 'Poppins', sans‑serif;
       color: #333;
+      background: #f9f9f9;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* 🧭 Header */
     header {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      padding: 18px 40px;
+      background: #ffffff;
+      padding: 20px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
     }
 
     header h1 {
-      color: #009966;
       margin: 0;
+      font-size: 24px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      color: #005e4b; /* a deep green accent */
     }
 
     header button {
-      background: #009966;
+      background: #007f6b;
       color: white;
       border: none;
       padding: 10px 18px;
-      border-radius: 8px;
+      font-size: 14px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.3s;
-      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
     }
 
     header button:hover {
-      background: #007f55;
+      background: #005e4b;
       transform: translateY(-2px);
     }
 
-    /* 🧩 Main Container */
     .container {
+      padding: 30px 40px;
       flex: 1;
-      padding: 40px 60px;
     }
 
-    /* 🔍 Search Bar */
     .search-box {
-      margin-bottom: 30px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
       flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
     .search-box input {
       flex: 1;
-      min-width: 250px;
+      min-width: 260px;
       padding: 12px 15px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
       font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .search-box input:focus {
-      border-color: #00b37e;
-      box-shadow: 0 0 0 3px rgba(0,179,126,0.2);
+      border-color: #007f6b;
+      box-shadow: 0 0 0 3px rgba(0,127,107,0.15);
     }
 
     .search-box button {
-      background: #00a86b;
+      background: #007f6b;
       color: white;
       border: none;
       padding: 12px 20px;
-      border-radius: 10px;
-      cursor: pointer;
       font-size: 15px;
-      font-weight: 500;
-      transition: all 0.3s ease;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .search-box button:hover {
-      background: #007f55;
+      background: #005e4b;
       transform: translateY(-2px);
     }
 
-    /* 🗂️ Needs Grid */
     .needs-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto‑fit, minmax(300px, 1fr));
+      gap: 28px;
     }
 
-    /* 📦 Need Card */
     .need-card {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(8px);
-      padding: 22px;
-      border-radius: 14px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
     }
 
     .need-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    .need-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .need-card-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .need-card h3 {
-      margin-top: 0;
-      color: #009966;
+      margin: 0 0 10px;
+      font-size: 20px;
       font-weight: 600;
+      color: #005e4b;
     }
 
-    .need-card p {
-      color: #555;
-      margin-bottom: 15px;
+    .need-card p.category {
+      margin: 0 0 15px;
+      font-size: 14px;
+      color: #777;
     }
 
     .need-card button {
-      background: #00a86b;
+      margin-top: auto;
+      background: #007f6b;
       color: white;
       border: none;
-      padding: 10px;
-      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 4px;
       cursor: pointer;
-      width: 100%;
-      transition: 0.3s;
-      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .need-card button:hover {
-      background: #007f55;
+      background: #005e4b;
       transform: translateY(-2px);
     }
 
-    /* ⚓ Footer */
     footer {
+      background: #005e4b;
+      color: #f9f9f9;
       text-align: center;
-      padding: 18px;
-      color: white;
-      background: rgba(0,0,0,0.25);
-      margin-top: auto;
+      padding: 20px 0;
       font-size: 14px;
-      letter-spacing: 0.3px;
     }
 
     @media (max-width: 600px) {
       .container {
-        padding: 25px;
+        padding: 20px;
+      }
+      header {
+        padding: 15px 20px;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Helper Dashboard</h1>
+    <h1>NeedsConnect</h1>
     <button onclick="logout()">Logout</button>
   </header>
 
   <div class="container">
     <div class="search-box">
-      <input type="text" id="search" placeholder="Search for needs...">
-      <button onclick="checkout()">Checkout Basket 🛒</button>
+      <input type="text" id="search" placeholder="Search needs...">
+      <button onclick="checkout()">Checkout Basket</button>
     </div>
-
-    <div class="needs-list" id="needsList"></div>
+    <div class="needs-list" id="needsList">
+      <!-- Sample card: you can add <img> tag if you have images -->
+      <!--
+      <div class="need-card">
+        <img src="path/to/image.jpg" alt="Need image">
+        <div class="need-card-content">
+          <h3>Example Need Title</h3>
+          <p class="category">Category: Relief</p>
+          <button>Add to Basket</button>
+        </div>
+      </div>
+      -->
+    </div>
   </div>
 
   <footer>© 2025 NeedsConnect | Empowering Communities</footer>
 
   <script>
+    // your existing JS logic continues
     const needs = [
       { name: "School Supplies for Kids", category: "Education" },
       { name: "Food for Refugee Families", category: "Relief" },
@@ -207,9 +225,12 @@
           const div = document.createElement("div");
           div.className = "need-card";
           div.innerHTML = `
-            <h3>${n.name}</h3>
-            <p>Category: ${n.category}</p>
-            <button onclick="addToBasket('${n.name}')">Add to Basket</button>
+            <!-- optional image -->
+            <div class="need-card-content">
+              <h3>${n.name}</h3>
+              <p class="category">Category: ${n.category}</p>
+              <button onclick="addToBasket('${n.name}')">Add to Basket</button>
+            </div>
           `;
           list.appendChild(div);
         });
