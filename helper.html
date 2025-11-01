@@ -1,94 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>NeedsConnect ‑ Helper Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: #f9f9f9;
-  color: #333;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  <meta charset="UTF-8">
+  <title>NeedsConnect ‑ Helper Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-header {
-  background: #ffffff;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+    header {
+      background: #ffffff;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-header .logo img { height: 60px; width: auto; }
-header .header-buttons { display: flex; gap: 10px; }
-header button { background: #007f6b; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-header button:hover { background: #005e4b; }
+    header .logo img { height: 60px; }
+    header button { background: #007f6b; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+    header button:hover { background: #005e4b; }
 
-.container { padding: 30px 40px; flex: 1; }
+    /* Category Menu Tabs */
+    .category-menu { display: flex; gap: 15px; margin: 20px 40px; }
+    .category-menu button { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; background: #eee; transition: 0.3s; }
+    .category-menu button.active { background: #007f6b; color: white; }
+    .category-menu button:hover { background: #00a86b; color: white; }
 
-.category-section { margin-bottom: 40px; }
-.category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.category-header h2 { margin: 0; color: #005e4b; font-size: 22px; }
-.category-header button { background: rgba(0,128,107,0.2); color: #007f6b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-.category-header button:hover { background: rgba(0,128,107,0.35); }
+    .category-section { display: flex; gap: 20px; margin: 20px 40px; }
+    .featured-need { flex: 1; position: relative; }
+    .featured-need img { width: 100%; border-radius: 10px; height: 400px; object-fit: cover; }
+    .featured-need .overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.4); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s; border-radius: 0 0 10px 10px; }
+    .featured-need:hover .overlay { opacity: 1; }
+    .featured-need .overlay button { background: #00a86b; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
 
-.needs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-.need-card { position: relative; overflow: hidden; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
-.need-card img { width: 100%; display: block; height: 160px; object-fit: cover; transition: transform 0.3s; }
-.need-card:hover img { transform: scale(1.05); }
-.need-card .overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.4); color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: 0.3s; }
-.need-card:hover .overlay { opacity: 1; background: rgba(0,0,0,0.6); }
-.need-card .overlay button { background: #00a86b; border: none; color: white; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px; opacity: 0; transform: translateY(10px); transition: 0.3s; }
-.need-card:hover .overlay button { opacity: 1; transform: translateY(0); }
+    .grid-needs { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; position: relative; }
+    .grid-needs .need-card { position: relative; border-radius: 10px; overflow: hidden; }
+    .grid-needs .need-card img { width: 100%; height: 190px; object-fit: cover; transition: transform 0.3s; }
+    .grid-needs .need-card:hover img { transform: scale(1.05); }
+    .grid-needs .need-card .overlay { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.4); color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s; }
+    .grid-needs .need-card:hover .overlay { opacity: 1; }
+    .grid-needs .view-more { position: absolute; right: 0; bottom: 0; width: 100px; height: 100%; background: rgba(0,0,0,0.2); color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: background 0.3s; font-weight: 600; }
+    .grid-needs .view-more:hover { background: rgba(0,0,0,0.4); }
 
-footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; }
+    footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; margin-top: auto; }
 
-/* Donation modal */
-.donation-modal { position: fixed; top: 50%; right: -400px; transform: translateY(-50%); width: 350px; background: white; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); padding: 20px; transition: right 0.3s ease; z-index: 200; }
-.donation-modal.active { right: 20px; }
-.donation-modal h3 { margin-top: 0; }
-.donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
-.donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-.donation-modal .preset-btns button { margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; transition: 0.2s; }
-.donation-modal .preset-btns button:hover { background: #007f6b; }
-.donation-modal button.confirm { margin-top: 15px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+    /* Modals */
+    .donation-modal {
+      position: fixed;
+      top: 50%;
+      right: -400px;
+      transform: translateY(-50%);
+      width: 350px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 200;
+    }
+    .donation-modal.active { right: 20px; }
+    .donation-modal h3 { margin-top: 0; }
+    .donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    .donation-modal .preset-btns button { margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; }
+    .donation-modal .preset-btns button:hover { background: #007f6b; }
+    .donation-modal button.confirm { margin-top: 15px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
 
-/* Checkout modal */
-.checkout-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 300; }
-.checkout-modal.active { display: flex; }
-.checkout-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 100%; }
-.checkout-content h3 { margin-top: 0; margin-bottom: 15px; }
-.checkout-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 500; }
-.checkout-total { margin-top: 15px; font-weight: 700; font-size: 18px; }
-.checkout-content button.confirm { margin-top: 20px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+    .category-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+      display: none; justify-content: center; align-items: center; overflow-y: auto; z-index: 300; padding: 40px;
+    }
+    .category-modal.active { display: flex; }
+    .category-modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 800px; }
+    .category-modal-content h3 { margin-top: 0; }
+    .category-modal-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 15px; margin-top: 20px; }
+    .category-modal-grid .need-card { height: 150px; overflow: hidden; border-radius: 8px; position: relative; }
+    .category-modal-grid .need-card img { width: 100%; height: 100%; object-fit: cover; }
+    .category-modal-grid .need-card .overlay { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.5); color: white; padding: 5px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s; }
+    .category-modal-grid .need-card:hover .overlay { opacity: 1; }
 
-/* Category modal */
-.category-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 400; }
-.category-modal.active { display: flex; }
-.category-modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto; }
-.category-modal-content h3 { margin-top: 0; margin-bottom: 20px; }
-.category-modal-content .needs-grid { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 15px; }
-</style>
+  </style>
 </head>
 <body>
 
 <header>
-  <a href="index.html" class="logo"><img src="newlogo.jpg" alt="NeedsConnect Logo"></a>
-  <div class="header-buttons">
+  <div class="logo"><img src="newlogo.jpg" alt="NeedsConnect"></div>
+  <div>
     <button onclick="checkoutBasket()">Checkout Basket</button>
     <button onclick="logout()">Logout</button>
   </div>
 </header>
 
-<div class="container" id="categoryContainer"></div>
+<div class="category-menu" id="categoryMenu"></div>
+
+<div id="categoryContainer"></div>
 
 <footer>© 2025 NeedsConnect | Empowering Communities</footer>
 
@@ -106,76 +121,95 @@ footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 
   <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
 </div>
 
-<!-- Checkout modal -->
-<div class="checkout-modal" id="checkoutModal">
-  <div class="checkout-content">
-    <h3>Your Basket</h3>
-    <div id="checkoutItems"></div>
-    <div class="checkout-total" id="checkoutTotal"></div>
-    <button class="confirm" onclick="confirmCheckout()">Confirm</button>
-  </div>
-</div>
-
 <!-- Category modal -->
 <div class="category-modal" id="categoryModal">
   <div class="category-modal-content">
-    <h3 id="categoryModalTitle">Category Name</h3>
-    <div class="needs-grid" id="categoryModalGrid"></div>
+    <h3 id="categoryModalTitle"></h3>
+    <div class="category-modal-grid" id="categoryModalGrid"></div>
   </div>
 </div>
 
+<!-- Checkout modal -->
+<div class="donation-modal" id="checkoutModal">
+  <h3>Your Basket</h3>
+  <div id="checkoutItems"></div>
+  <div id="checkoutTotal"></div>
+  <button class="confirm" onclick="confirmCheckout()">Confirm</button>
+</div>
+
 <script>
+const categories = ["Education","Relief","Health","Infrastructure"];
 const needs = [
   { name: "School Supplies for Kids", categories: ["Education"], image: "img/need1.jpg" },
-  { name: "Food for Refugee Families", categories: ["Relief","Urgent"], image: "img/need2.jpg" },
-  { name: "Medical Aid for Elderly", categories: ["Health","Urgent"], image: "img/need3.jpg" },
-  { name: "Clean Water Project", categories: ["Infrastructure"], image: "img/need4.jpg" },
   { name: "Books for Library", categories: ["Education"], image: "img/need5.jpg" },
+  { name: "Scholarship Fund", categories: ["Education"], image: "img/need8.jpg" },
+  { name: "Tutoring Program", categories: ["Education"], image: "img/need9.jpg" },
+  { name: "Computer Lab Upgrade", categories: ["Education"], image: "img/need10.jpg" },
+  { name: "Food for Refugee Families", categories: ["Relief","Urgent"], image: "img/need2.jpg" },
   { name: "Winter Clothing Drive", categories: ["Relief"], image: "img/need6.jpg" },
-  { name: "Neighborhood Cleanup", categories: ["Community"], image: "img/need7.jpg" },
+  { name: "Hygiene Kits Distribution", categories: ["Relief"], image: "img/need11.jpg" },
+  { name: "Emergency Shelter Support", categories: ["Relief","Urgent"], image: "img/need12.jpg" },
+  { name: "Disaster Relief Fund", categories: ["Relief"], image: "img/need13.jpg" },
+  { name: "Medical Aid for Elderly", categories: ["Health","Urgent"], image: "img/need3.jpg" },
+  { name: "Vaccination Campaign", categories: ["Health"], image: "img/need14.jpg" },
+  { name: "Mental Health Awareness", categories: ["Health"], image: "img/need15.jpg" },
+  { name: "Mobile Clinic Support", categories: ["Health"], image: "img/need16.jpg" },
+  { name: "Nutrition Program", categories: ["Health"], image: "img/need17.jpg" },
+  { name: "Clean Water Project", categories: ["Infrastructure"], image: "img/need4.jpg" },
+  { name: "Community Garden", categories: ["Infrastructure"], image: "img/need18.jpg" },
+  { name: "Solar Panel Installation", categories: ["Infrastructure"], image: "img/need19.jpg" },
+  { name: "Playground Build", categories: ["Infrastructure"], image: "img/need20.jpg" },
+  { name: "Street Lighting Project", categories: ["Infrastructure"], image: "img/need21.jpg" }
 ];
 
-const categories = ["Education","Relief","Health","Infrastructure","Community","Urgent"];
-let basket = [], currentItem=null, donationAmount=0;
+let basket = [];
+let currentItem = null;
+let donationAmount = 0;
 
-const donationModal=document.getElementById("donationModal");
-const donationTitle=document.getElementById("donationTitle");
-const customAmount=document.getElementById("customAmount");
-const categoryModal=document.getElementById("categoryModal");
-const categoryModalTitle=document.getElementById("categoryModalTitle");
-const categoryModalGrid=document.getElementById("categoryModalGrid");
+const donationModal = document.getElementById("donationModal");
+const donationTitle = document.getElementById("donationTitle");
+const customAmount = document.getElementById("customAmount");
+const categoryModal = document.getElementById("categoryModal");
+const categoryModalTitle = document.getElementById("categoryModalTitle");
+const categoryModalGrid = document.getElementById("categoryModalGrid");
 
-function logout(){ localStorage.removeItem("user"); window.location.href="login.html"; }
+function logout(){ window.location.href="login.html"; }
 
-function renderCategories(){
-  const container=document.getElementById("categoryContainer");
-  container.innerHTML="";
-  categories.forEach(cat=>{
-    const catSection=document.createElement("div");
-    catSection.className="category-section";
-    const topNeeds=needs.filter(n=>n.categories.includes(cat)).slice(0,5);
-    catSection.innerHTML=`
-      <div class="category-header">
-        <h2>${cat}</h2>
-        <button onclick="viewMore('${cat}')">View More</button>
-      </div>
-      <div class="needs-grid"></div>
-    `;
-    const grid=catSection.querySelector(".needs-grid");
-    topNeeds.forEach(n=>{
-      const card=document.createElement("div");
-      card.className="need-card";
-      card.innerHTML=`
-        <img src="${n.image}" alt="${n.name}">
-        <div class="overlay">
-          <span>${n.name}</span>
-          <button onclick="openDonation('${n.name}')">Donate</button>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-    container.appendChild(catSection);
+function renderCategoryMenu(){
+  const menu = document.getElementById("categoryMenu");
+  menu.innerHTML = "";
+  categories.forEach((cat,i)=>{
+    const btn = document.createElement("button");
+    btn.textContent = cat;
+    if(i===0) btn.classList.add("active");
+    btn.onclick = () => { document.querySelectorAll(".category-menu button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); renderCategorySection(cat); }
+    menu.appendChild(btn);
   });
+}
+
+function renderCategorySection(cat){
+  const container = document.getElementById("categoryContainer");
+  container.innerHTML = "";
+  const catNeeds = needs.filter(n=>n.categories.includes(cat));
+  if(catNeeds.length<5) return;
+
+  const section = document.createElement("div"); section.className="category-section";
+  section.innerHTML=`
+    <div class="featured-need">
+      <img src="${catNeeds[0].image}" alt="${catNeeds[0].name}">
+      <div class="overlay"><span>${catNeeds[0].name}</span><button onclick="openDonation('${catNeeds[0].name}')">Donate</button></div>
+    </div>
+    <div class="grid-needs">
+      ${catNeeds.slice(1,5).map(n=>`
+        <div class="need-card">
+          <img src="${n.image}" alt="${n.name}">
+          <div class="overlay"><span>${n.name}</span><button onclick="openDonation('${n.name}')">Donate</button></div>
+        </div>
+      `).join("")}
+      <div class="view-more" onclick="viewMore('${cat}')">View More →</div>
+    </div>
+  `;
+  container.appendChild(section);
 }
 
 function viewMore(cat){
@@ -185,13 +219,7 @@ function viewMore(cat){
   needs.filter(n=>n.categories.includes(cat)).forEach(n=>{
     const card=document.createElement("div");
     card.className="need-card";
-    card.innerHTML=`
-      <img src="${n.image}" alt="${n.name}">
-      <div class="overlay">
-        <span>${n.name}</span>
-        <button onclick="openDonation('${n.name}')">Donate</button>
-      </div>
-    `;
+    card.innerHTML=`<img src="${n.image}" alt="${n.name}"><div class="overlay"><span>${n.name}</span><button onclick="openDonation('${n.name}')">Donate</button></div>`;
     categoryModalGrid.appendChild(card);
   });
 }
@@ -215,43 +243,39 @@ function confirmDonation(){
   basket.push({name:currentItem, amount:donationAmount});
   donationModal.classList.remove("active");
   currentItem=null;
-  renderBasketMessage();
+  showBasketMessage(donationAmount);
 }
 
-// Side notification instead of alert
-function renderBasketMessage(){
+function showBasketMessage(amount){
   const msg=document.createElement("div");
-  msg.style.position="fixed";
-  msg.style.top="20px"; msg.style.right="20px";
-  msg.style.background="#00a86b"; msg.style.color="white";
-  msg.style.padding="12px 18px"; msg.style.borderRadius="8px";
-  msg.style.boxShadow="0 4px 12px rgba(0,0,0,0.2)";
+  msg.style.position="fixed"; msg.style.top="20px"; msg.style.right="20px";
+  msg.style.background="#00a86b"; msg.style.color="white"; msg.style.padding="12px 18px";
+  msg.style.borderRadius="8px"; msg.style.boxShadow="0 4px 12px rgba(0,0,0,0.2)";
   msg.style.zIndex="500";
-  msg.textContent=`Item added to basket, fund: $${donationAmount}`;
+  msg.textContent=`Item added to basket, fund: $${amount}`;
   document.body.appendChild(msg);
-  setTimeout(()=>{ document.body.removeChild(msg); },3000);
+  setTimeout(()=>document.body.removeChild(msg),3000);
 }
 
-// Checkout functions
+// Checkout modal
 function checkoutBasket(){
-  const checkoutModal=document.getElementById("checkoutModal");
+  const modal=document.getElementById("checkoutModal");
   const itemsDiv=document.getElementById("checkoutItems");
   const totalDiv=document.getElementById("checkoutTotal");
-  itemsDiv.innerHTML="";
-  let total=0;
+  itemsDiv.innerHTML=""; let total=0;
   basket.forEach(item=>{
     total+=item.amount;
-    const div=document.createElement("div");
-    div.className="checkout-item"; div.textContent=item.name;
-    const span=document.createElement("span"); span.textContent=`$${item.amount}`;
-    div.appendChild(span); itemsDiv.appendChild(div);
+    const div=document.createElement("div"); div.style.display="flex"; div.style.justifyContent="space-between"; div.textContent=item.name;
+    const span=document.createElement("span"); span.textContent=`$${item.amount}`; div.appendChild(span); itemsDiv.appendChild(div);
   });
   totalDiv.textContent=`Total: $${total}`;
-  checkoutModal.classList.add("active");
+  modal.classList.add("active");
 }
 function confirmCheckout(){ basket=[]; document.getElementById("checkoutModal").classList.remove("active"); }
 
-renderCategories();
+renderCategoryMenu();
+renderCategorySection(categories[0]);
 </script>
+
 </body>
 </html>
