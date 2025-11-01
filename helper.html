@@ -144,12 +144,15 @@
 <body>
   <header>
     
-
     <button onclick="window.location.href='request.html'">Request a Need</button>
 
     <a href="index.html" class="logo">
       <img src="newlogo.jpg" alt="NeedsConnect Logo">
     </a>
+ 
+    
+   
+   
     <div class="header-buttons">
       <button onclick="checkoutBasket()">Checkout Basket</button>
       <button onclick="logout()">Logout</button>
@@ -223,6 +226,11 @@
           `;
           list.appendChild(div);
         });
+    }
+
+    function logout() {
+    localStorage.removeItem("user");   // remove saved user
+    window.location.href = "login.html"; // redirect to login page
     }
 
     function openDonation(name) {
