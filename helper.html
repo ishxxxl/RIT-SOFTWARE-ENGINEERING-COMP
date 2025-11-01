@@ -1,297 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>NeedsConnect ‑ Helper Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8">
+<title>NeedsConnect ‑ Helper Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-    header {
-      background: #ffffff;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between; 
-      align-items: center;
-      padding: 20px 40px;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-   }
-    }
-     header .header-buttons {
-      display: flex;
-      flex-direction: column; 
-      gap: 10px;
-    }
-    header h1 {
-      margin: 0; 
-      font-size: 24px; 
-      font-weight: 600; 
-      color: #005e4b; 
-    }
+header {
+  background: #ffffff;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-    header .logo img {
-      height: 100px;          
-      width: auto;
-      display: block;
-    }
-    
-    header .logo {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
-    
-    header button {
-      background: #007f6b;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    header button:hover { background: #005e4b; }
-    
+header .logo img { height: 60px; width: auto; }
+header .header-buttons { display: flex; gap: 10px; }
+header button { background: #007f6b; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+header button:hover { background: #005e4b; }
 
-    .container { padding: 30px 40px; flex: 1; }
+.container { padding: 30px 40px; flex: 1; }
 
-    .search-box { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
-    .search-box input {
-      flex: 1; min-width: 260px; padding: 12px 15px; font-size: 16px; border: 1px solid #ddd;
-      border-radius: 4px; outline: none; transition: 0.3s;
-    }
-    .search-box input:focus { border-color: #007f6b; box-shadow: 0 0 0 3px rgba(0,127,107,0.15); }
-    .search-box button {
-      background: #007f6b; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer;
-    }
+.category-section { margin-bottom: 40px; }
+.category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.category-header h2 { margin: 0; color: #005e4b; font-size: 22px; }
+.category-header button { background: rgba(0,128,107,0.2); color: #007f6b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+.category-header button:hover { background: rgba(0,128,107,0.35); }
 
-    .needs-list {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px;
-    }
+.needs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.need-card { position: relative; overflow: hidden; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
+.need-card img { width: 100%; display: block; height: 160px; object-fit: cover; transition: transform 0.3s; }
+.need-card:hover img { transform: scale(1.05); }
+.need-card .overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.4); color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: 0.3s; }
+.need-card:hover .overlay { opacity: 1; background: rgba(0,0,0,0.6); }
+.need-card .overlay button { background: #00a86b; border: none; color: white; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px; opacity: 0; transform: translateY(10px); transition: 0.3s; }
+.need-card:hover .overlay button { opacity: 1; transform: translateY(0); }
 
-    .need-card {
-      background: #ffffff; border-radius: 8px; overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;
-      display: flex; flex-direction: column;
-    }
-    .need-card:hover { transform: translateY(-6px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; }
 
-    .need-card img { width: 100%; display: block; }
-    .need-card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-    .need-card h3 { margin: 0 0 10px; font-size: 20px; font-weight: 600; color: #005e4b; }
-    .need-card p.category { margin: 0 0 15px; font-size: 14px; color: #777; }
-    .need-card button { margin-top: auto; background: #007f6b; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; }
+/* Donation modal */
+.donation-modal { position: fixed; top: 50%; right: -400px; transform: translateY(-50%); width: 350px; background: white; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); padding: 20px; transition: right 0.3s ease; z-index: 200; }
+.donation-modal.active { right: 20px; }
+.donation-modal h3 { margin-top: 0; }
+.donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
+.donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+.donation-modal .preset-btns button { margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; transition: 0.2s; }
+.donation-modal .preset-btns button:hover { background: #007f6b; }
+.donation-modal button.confirm { margin-top: 15px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
 
-    .need-card button:hover { background: #005e4b; transform: translateY(-2px); }
+/* Checkout modal */
+.checkout-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 300; }
+.checkout-modal.active { display: flex; }
+.checkout-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 100%; }
+.checkout-content h3 { margin-top: 0; margin-bottom: 15px; }
+.checkout-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 500; }
+.checkout-total { margin-top: 15px; font-weight: 700; font-size: 18px; }
+.checkout-content button.confirm { margin-top: 20px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
 
-    footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; }
-
-    /* Side popup modal */
-    .donation-modal {
-      position: fixed;
-      top: 50%;
-      right: -400px;
-      transform: translateY(-50%);
-      width: 350px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      padding: 20px;
-      transition: right 0.3s ease;
-      z-index: 200;
-    }
-    .donation-modal.active { right: 20px; }
-    .donation-modal h3 { margin-top: 0; }
-    .donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
-    .donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-    .donation-modal .preset-btns button {
-      margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; transition: 0.2s;
-    }
-    .donation-modal .preset-btns button:hover { background: #007f6b; }
-    .donation-modal button.confirm { margin-top: 15px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-
-    /* Checkout page styling */
-    .checkout-modal {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-      display: none; justify-content: center; align-items: center; z-index: 300;
-    }
-    .checkout-modal.active { display: flex; }
-    .checkout-content {
-      background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 100%;
-    }
-    .checkout-content h3 { margin-top: 0; margin-bottom: 15px; }
-    .checkout-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 500; }
-    .checkout-total { margin-top: 15px; font-weight: 700; font-size: 18px; }
-    .checkout-content button.confirm { margin-top: 20px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-  </style>
+/* Category modal */
+.category-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 400; }
+.category-modal.active { display: flex; }
+.category-modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto; }
+.category-modal-content h3 { margin-top: 0; margin-bottom: 20px; }
+.category-modal-content .needs-grid { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 15px; }
+</style>
 </head>
 <body>
-  <header>
-    
-    <button onclick="window.location.href='request.html'">Request a Need</button>
 
-    <a href="index.html" class="logo">
-      <img src="newlogo.jpg" alt="NeedsConnect Logo">
-    </a>
- 
-    
-   
-   
-    <div class="header-buttons">
-      <button onclick="checkoutBasket()">Checkout Basket</button>
-      <button onclick="logout()">Logout</button>
-    </div>
-    
-  </header>
-
-  <div class="container">
-    <div class="search-box">
-      <input type="text" id="search" placeholder="Search needs...">
-    </div>
-    <div class="needs-list" id="needsList"></div>
+<header>
+  <a href="index.html" class="logo"><img src="newlogo.jpg" alt="NeedsConnect Logo"></a>
+  <div class="header-buttons">
+    <button onclick="checkoutBasket()">Checkout Basket</button>
+    <button onclick="logout()">Logout</button>
   </div>
+</header>
 
-  <footer>© 2025 NeedsConnect | Empowering Communities</footer>
+<div class="container" id="categoryContainer"></div>
 
-  <!-- Donation modal -->
-  <div class="donation-modal" id="donationModal">
-    <h3 id="donationTitle">Donate</h3>
-    <label>Select Amount:</label>
-    <div class="preset-btns">
-      <button onclick="setAmount(5)">$5</button>
-      <button onclick="setAmount(10)">$10</button>
-      <button onclick="setAmount(20)">$20</button>
-    </div>
-    <label>Or custom amount:</label>
-    <input type="number" id="customAmount" min="1" max="1000" placeholder="Max $1000">
-    <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
+<footer>© 2025 NeedsConnect | Empowering Communities</footer>
+
+<!-- Donation modal -->
+<div class="donation-modal" id="donationModal">
+  <h3 id="donationTitle">Donate</h3>
+  <label>Select Amount:</label>
+  <div class="preset-btns">
+    <button onclick="setAmount(5)">$5</button>
+    <button onclick="setAmount(10)">$10</button>
+    <button onclick="setAmount(20)">$20</button>
   </div>
+  <label>Or custom amount:</label>
+  <input type="number" id="customAmount" min="1" max="1000" placeholder="Max $1000">
+  <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
+</div>
 
-  <!-- Checkout modal -->
-  <div class="checkout-modal" id="checkoutModal">
-    <div class="checkout-content">
-      <h3>Your Basket</h3>
-      <div id="checkoutItems"></div>
-      <div class="checkout-total" id="checkoutTotal"></div>
-      <button class="confirm" onclick="confirmCheckout()">Confirm</button>
-    </div>
+<!-- Checkout modal -->
+<div class="checkout-modal" id="checkoutModal">
+  <div class="checkout-content">
+    <h3>Your Basket</h3>
+    <div id="checkoutItems"></div>
+    <div class="checkout-total" id="checkoutTotal"></div>
+    <button class="confirm" onclick="confirmCheckout()">Confirm</button>
   </div>
+</div>
 
-  <script>
-    const needs = [
-      { name: "School Supplies for Kids", category: "Education" },
-      { name: "Food for Refugee Families", category: "Relief" },
-      { name: "Medical Aid for Elderly", category: "Health" },
-      { name: "Clean Water Project", category: "Infrastructure" },
-    ];
+<!-- Category modal -->
+<div class="category-modal" id="categoryModal">
+  <div class="category-modal-content">
+    <h3 id="categoryModalTitle">Category Name</h3>
+    <div class="needs-grid" id="categoryModalGrid"></div>
+  </div>
+</div>
 
-    let basket = [];
-    let currentItem = null;
-    let donationAmount = 0;
+<script>
+const needs = [
+  { name: "School Supplies for Kids", categories: ["Education"], image: "img/need1.jpg" },
+  { name: "Food for Refugee Families", categories: ["Relief","Urgent"], image: "img/need2.jpg" },
+  { name: "Medical Aid for Elderly", categories: ["Health","Urgent"], image: "img/need3.jpg" },
+  { name: "Clean Water Project", categories: ["Infrastructure"], image: "img/need4.jpg" },
+  { name: "Books for Library", categories: ["Education"], image: "img/need5.jpg" },
+  { name: "Winter Clothing Drive", categories: ["Relief"], image: "img/need6.jpg" },
+  { name: "Neighborhood Cleanup", categories: ["Community"], image: "img/need7.jpg" },
+];
 
-    const donationModal = document.getElementById("donationModal");
-    const donationTitle = document.getElementById("donationTitle");
-    const customAmount = document.getElementById("customAmount");
+const categories = ["Education","Relief","Health","Infrastructure","Community","Urgent"];
+let basket = [], currentItem=null, donationAmount=0;
 
-    function renderNeeds(filter = "") {
-      const list = document.getElementById("needsList");
-      list.innerHTML = "";
-      needs
-        .filter(n => n.name.toLowerCase().includes(filter.toLowerCase()))
-        .forEach(n => {
-          const div = document.createElement("div");
-          div.className = "need-card";
-          div.innerHTML = `
-            <div class="need-card-content">
-              <h3>${n.name}</h3>
-              <p class="category">Category: ${n.category}</p>
-              <button onclick="openDonation('${n.name}')">Add to Basket</button>
-            </div>
-          `;
-          list.appendChild(div);
-        });
-    }
+const donationModal=document.getElementById("donationModal");
+const donationTitle=document.getElementById("donationTitle");
+const customAmount=document.getElementById("customAmount");
+const categoryModal=document.getElementById("categoryModal");
+const categoryModalTitle=document.getElementById("categoryModalTitle");
+const categoryModalGrid=document.getElementById("categoryModalGrid");
 
-    function logout() {
-    localStorage.removeItem("user");   // remove saved user
-    window.location.href = "login.html"; // redirect to login page
-    }
+function logout(){ localStorage.removeItem("user"); window.location.href="login.html"; }
 
-    function openDonation(name) {
-      currentItem = name;
-      donationTitle.textContent = `Donate to "${name}"`;
-      customAmount.value = "";
-      donationAmount = 0;
-      donationModal.classList.add("active");
-    }
-
-    function setAmount(val) {
-      donationAmount = val;
-      customAmount.value = val;
-    }
-
-    function confirmDonation() {
-      let amount = parseFloat(customAmount.value);
-      if (isNaN(amount) || amount < 1) {
-        alert("Please enter a valid amount.");
-        return;
-      }
-      if (amount > 1000) amount = 1000;
-      donationAmount = amount;
-
-      basket.push({ name: currentItem, amount: donationAmount });
-      donationModal.classList.remove("active");
-      alert(`"${currentItem}" added to basket, fund amount: $${donationAmount}`);
-      currentItem = null;
-    }
-
-    function checkoutBasket() {
-      const checkoutModal = document.getElementById("checkoutModal");
-      const itemsDiv = document.getElementById("checkoutItems");
-      const totalDiv = document.getElementById("checkoutTotal");
-      itemsDiv.innerHTML = "";
-      let total = 0;
-      basket.forEach(item => {
-        total += item.amount;
-        const div = document.createElement("div");
-        div.className = "checkout-item";
-        div.textContent = `${item.name}`;
-        const span = document.createElement("span");
-        span.textContent = `$${item.amount}`;
-        div.appendChild(span);
-        itemsDiv.appendChild(div);
-      });
-      totalDiv.textContent = `Total: $${total}`;
-      checkoutModal.classList.add("active");
-    }
-
-    function confirmCheckout() {
-      alert("Thank you! Your donations have been confirmed.");
-      basket = [];
-      document.getElementById("checkoutModal").classList.remove("active");
-    }
-
-    document.getElementById("search").addEventListener("input", e => {
-      renderNeeds(e.target.value);
+function renderCategories(){
+  const container=document.getElementById("categoryContainer");
+  container.innerHTML="";
+  categories.forEach(cat=>{
+    const catSection=document.createElement("div");
+    catSection.className="category-section";
+    const topNeeds=needs.filter(n=>n.categories.includes(cat)).slice(0,5);
+    catSection.innerHTML=`
+      <div class="category-header">
+        <h2>${cat}</h2>
+        <button onclick="viewMore('${cat}')">View More</button>
+      </div>
+      <div class="needs-grid"></div>
+    `;
+    const grid=catSection.querySelector(".needs-grid");
+    topNeeds.forEach(n=>{
+      const card=document.createElement("div");
+      card.className="need-card";
+      card.innerHTML=`
+        <img src="${n.image}" alt="${n.name}">
+        <div class="overlay">
+          <span>${n.name}</span>
+          <button onclick="openDonation('${n.name}')">Donate</button>
+        </div>
+      `;
+      grid.appendChild(card);
     });
+    container.appendChild(catSection);
+  });
+}
 
-    renderNeeds();
-  </script>
+function viewMore(cat){
+  categoryModal.classList.add("active");
+  categoryModalTitle.textContent=cat;
+  categoryModalGrid.innerHTML="";
+  needs.filter(n=>n.categories.includes(cat)).forEach(n=>{
+    const card=document.createElement("div");
+    card.className="need-card";
+    card.innerHTML=`
+      <img src="${n.image}" alt="${n.name}">
+      <div class="overlay">
+        <span>${n.name}</span>
+        <button onclick="openDonation('${n.name}')">Donate</button>
+      </div>
+    `;
+    categoryModalGrid.appendChild(card);
+  });
+}
+
+categoryModal.addEventListener("click", e=>{ if(e.target===categoryModal) categoryModal.classList.remove("active"); });
+
+// Donation modal functions
+function openDonation(name){
+  currentItem=name;
+  donationTitle.textContent=`Donate to "${name}"`;
+  customAmount.value="";
+  donationAmount=0;
+  donationModal.classList.add("active");
+}
+function setAmount(val){ donationAmount=val; customAmount.value=val; }
+function confirmDonation(){
+  let amount=parseFloat(customAmount.value);
+  if(isNaN(amount)||amount<1){ alert("Enter valid amount"); return;}
+  if(amount>1000) amount=1000;
+  donationAmount=amount;
+  basket.push({name:currentItem, amount:donationAmount});
+  donationModal.classList.remove("active");
+  currentItem=null;
+  renderBasketMessage();
+}
+
+// Side notification instead of alert
+function renderBasketMessage(){
+  const msg=document.createElement("div");
+  msg.style.position="fixed";
+  msg.style.top="20px"; msg.style.right="20px";
+  msg.style.background="#00a86b"; msg.style.color="white";
+  msg.style.padding="12px 18px"; msg.style.borderRadius="8px";
+  msg.style.boxShadow="0 4px 12px rgba(0,0,0,0.2)";
+  msg.style.zIndex="500";
+  msg.textContent=`Item added to basket, fund: $${donationAmount}`;
+  document.body.appendChild(msg);
+  setTimeout(()=>{ document.body.removeChild(msg); },3000);
+}
+
+// Checkout functions
+function checkoutBasket(){
+  const checkoutModal=document.getElementById("checkoutModal");
+  const itemsDiv=document.getElementById("checkoutItems");
+  const totalDiv=document.getElementById("checkoutTotal");
+  itemsDiv.innerHTML="";
+  let total=0;
+  basket.forEach(item=>{
+    total+=item.amount;
+    const div=document.createElement("div");
+    div.className="checkout-item"; div.textContent=item.name;
+    const span=document.createElement("span"); span.textContent=`$${item.amount}`;
+    div.appendChild(span); itemsDiv.appendChild(div);
+  });
+  totalDiv.textContent=`Total: $${total}`;
+  checkoutModal.classList.add("active");
+}
+function confirmCheckout(){ basket=[]; document.getElementById("checkoutModal").classList.remove("active"); }
+
+renderCategories();
+</script>
 </body>
 </html>
