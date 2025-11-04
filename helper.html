@@ -257,6 +257,14 @@
 </div>
 
 <script>
+// ✅ Fetch needs from the server (MariaDB)
+fetch("http://localhost:5000/needs")
+  .then(res => res.json())
+  .then(data => {
+    console.log("Loaded needs from database:", data);
+  })
+  .catch(err => console.error("Error loading needs:", err));
+
 const categories = {
   "Education": [
     {name: "School Supplies", img: "https://i.postimg.cc/Fs7kBqJr/School-supplies.jpg"},
