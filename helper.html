@@ -257,6 +257,13 @@
 </div>
 
 <script>
+
+// Redirect to login if not logged in
+if (!localStorage.getItem("user")) {
+  window.location.href = "login.html";
+}
+
+
 // ✅ Fetch needs from the server (MariaDB)
 fetch("http://localhost:5000/needs")
   .then(res => res.json())
