@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: url("Background.jpg") no-repeat center center fixed;
+      background: url("DashboardBackground.jpg") no-repeat center center fixed;
       background-size: cover;
       margin: 0;
       padding: 0;
@@ -24,10 +24,7 @@
       text-align: center;
       margin-top: 20px;
     }
-    h2 {
-      color: #006b3c;
-      margin-bottom: 20px;
-    }
+    h2 { color: #006b3c; margin-bottom: 20px; }
     input, select, textarea {
       width: 100%;
       padding: 12px;
@@ -47,10 +44,8 @@
       cursor: pointer;
       font-size: 16px;
     }
-    button:hover {
-      background: #009e63;
-    }
-    .my-requests {
+    button:hover { background: #009e63; }
+    .my-requests, .notifications {
       width: 400px;
       margin-top: 20px;
       background-color: rgba(255, 255, 255, 0.95);
@@ -58,84 +53,134 @@
       padding: 20px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     }
-    .my-requests h3 {
-      margin-top: 0;
-      color: #006b3c;
-    }
-    .request-item {
+    h3 { margin-top: 0; color: #006b3c; }
+    .request-item, .notification-item {
       border-bottom: 1px solid #ccc;
       padding: 8px 0;
       text-align: left;
     }
+    .accepted { color: green; font-weight: bold; }
+    .declined { color: red; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div class="request-container">
-    <h2>Request a Need</h2>
-    <input type="text" id="needName" placeholder="Name of the Need">
-    <select id="category">
-      <option value="">Select Category</option>
-      <option value="Education">Education</option>
-      <option value="Health">Health</option>
-      <option value="Relief">Relief</option>
-      <option value="Infrastructure">Infrastructure</option>
-    </select>
-    <textarea id="description" rows="4" placeholder="Description of the need"></textarea>
-    <button onclick="submitNeed()">Submit Request</button>
-  </div>
+<div class="request-container">
+  <h2>Request a Need</h2>
+  <input type="text" id="needName" placeholder="Name of the Need">
+  <input type="text" id="requestUsername" placeholder="Username">
+  <input type="number" id="amount" placeholder="Amount (AED)" min="0">
+  <select id="category">
+    <option value="">Select Category</option>
+    <option value="Education">Education</option>
+    <option value="Health">Health</option>
+    <option value="Relief">Relief</option>
+    <option value="Infrastructure">Infrastructure</option>
+  </select>
+  <textarea id="description" rows="4" placeholder="Description of the need"></textarea>
+  <button onclick="submitNeed()">Submit Request</button>
+</div>
 
-  <div class="my-requests">
-    <h3>My Requests</h3>
-    <div id="requestsList">No requests yet.</div>
-  </div>
+<div class="my-requests">
+  <h3>My Requests</h3>
+  <div id="requestsList">No requests yet.</div>
+</div>
 
-  <script>
-    function submitNeed() {
-      const name = document.getElementById('needName').value.trim();
-      const category = document.getElementById('category').value;
-      const desc = document.getElementById('description').value.trim();
+<div class="notifications">
+  <h3>Notifications</h3>
+  <div id="notificationsList">No notifications yet.</div>
+</div>
 
-      if (!name || !category || !desc) {
-        alert("Please fill out all fields!");
-        return;
-      }
+<script>
+function submitNeed() {
+  const name = document.getElementById('needName').value.trim();
+  const category = document.getElementById('category').value;
+  const desc = document.getElementById('description').value.trim();
+  const requestUser = document.getElementById('requestUsername').value.trim();
+  const amount = document.getElementById('amount').value.trim();
 
-      // Save in localStorage
-      let requests = JSON.parse(localStorage.getItem('requests') || '[]');
-      requests.push({name, category, description: desc});
-      localStorage.setItem('requests', JSON.stringify(requests));
+  if (!name || !category || !desc || !requestUser || !amount) {
+    alert("Please fill out all fields!");
+    return;
+  }
+  
+  let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+  notifications.push({ message: `Request for "${name}" submitted successfully!` });
+  localStorage.setItem('notifications', JSON.stringify(notifications));
 
-      alert("Your need has been requested successfully!");
+  let requests = JSON.parse(localStorage.getItem('requests') || '[]');
+  notifications.push({ message: `Request for "${name}" submitted successfully!` });
+  localStorage.setItem('notifications', JSON.stringify(notifications));
+  
+  
+  requests.push({
+    name,
+    category,
+    description: desc,
+    requestUser,
+    amount,
+    status: "Pending"
+  });
+  localStorage.setItem('requests', JSON.stringify(requests));
 
-      // Clear input fields
-      document.getElementById('needName').value = '';
-      document.getElementById('category').value = '';
-      document.getElementById('description').value = '';
+  alert("Your need has been requested successfully!");
 
-      renderRequests(); // Refresh the request list
-    }
+  document.getElementById('needName').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('description').value = '';
+  document.getElementById('requestUsername').value = '';
+  document.getElementById('amount').value = '';
 
-    function renderRequests() {
-      const requestsList = document.getElementById('requestsList');
-      let requests = JSON.parse(localStorage.getItem('requests') || '[]');
-      if (requests.length === 0) {
-        requestsList.innerHTML = "No requests yet.";
-        return;
-      }
+  renderRequests();
+}
 
-      requestsList.innerHTML = "";
-      requests.forEach((r, index) => {
-        const div = document.createElement('div');
-        div.className = 'request-item';
-        div.innerHTML = `<strong>${r.name}</strong> (${r.category})<br>${r.description}`;
-        requestsList.appendChild(div);
-      });
-    }
+function renderRequests() {
+  const requestsList = document.getElementById('requestsList');
+  let requests = JSON.parse(localStorage.getItem('requests') || '[]');
 
-    // Render requests when page loads
-    window.onload = renderRequests;
-  </script>
+  if (requests.length === 0) {
+    requestsList.innerHTML = "No requests yet.";
+    return;
+  }
+
+  requestsList.innerHTML = "";
+  requests.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'request-item';
+    const statusClass = r.status.toLowerCase() === "accepted" ? "accepted" : (r.status.toLowerCase() === "declined" ? "declined" : "");
+    div.innerHTML = `<strong>${r.name}</strong> (${r.category})<br>
+                     Description: ${r.description}<br>
+                     Username: ${r.requestUser}<br>
+                     Amount: AED ${r.amount}<br>
+                     Status: <span class="${statusClass}">${r.status}</span>`;
+    requestsList.appendChild(div);
+  });
+}
+
+function renderNotifications() {
+  const notificationsList = document.getElementById('notificationsList');
+  let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+
+  if (notifications.length === 0) {
+    notificationsList.innerHTML = "No notifications yet.";
+    return;
+  }
+
+  notificationsList.innerHTML = "";
+  notifications.forEach(n => {
+    const div = document.createElement('div');
+    div.className = 'notification-item';
+    div.innerHTML = n.message;
+    notificationsList.appendChild(div);
+  });
+}
+
+// Initial render
+window.onload = function() {
+  renderRequests();
+  renderNotifications();
+};
+</script>
 
 </body>
 </html>
