@@ -7,7 +7,7 @@
 <style>
 body {
   font-family: 'Poppins', sans-serif;
-  background: url("Background.jpg") no-repeat center center fixed;
+  background: url("LoginBackground.jpg") no-repeat center center fixed;
   background-size: cover;
   margin: 0;
   display: flex;
@@ -32,17 +32,18 @@ header {
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   width: 90%;
   max-width: 900px;
+  margin-bottom: 30px;
 }
 h2 { text-align: center; color: #007f5f; margin-bottom: 20px; }
 form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
 input, select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 200px; }
 button { background: linear-gradient(135deg,#00a86b,#007f5f); color:white; border:none; padding:10px 20px; cursor:pointer; }
 button:hover { background: linear-gradient(135deg,#00b874,#009e63); transform: translateY(-2px); }
-table { width: 100%; border-collapse: collapse; text-align: center; }
+table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom:20px; }
 th, td { padding: 12px; border-bottom: 1px solid #ccc; }
 th { background: #00a86b; color: white; }
 td button { padding: 6px 10px; margin:0 3px; font-size:14px; }
-#noNeeds { text-align: center; color: gray; margin-top:20px; font-style: italic; }
+#noNeeds, #noRequests { text-align: center; color: gray; margin-top:20px; font-style: italic; }
 footer { margin-top:auto; text-align:center; padding:10px; color:white; }
 </style>
 </head>
@@ -75,13 +76,25 @@ footer { margin-top:auto; text-align:center; padding:10px; color:white; }
   <p id="noNeeds">No needs added yet.</p>
 </div>
 
+<div class="container">
+  <h2>User Requests</h2>
+  <table id="requestsTable">
+    <thead>
+      <tr><th>User</th><th>Need</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p id="noRequests">No requests available.</p>
+</div>
+
 <footer>© 2025 NeedsConnect | Manager Portal</footer>
 
 <script>
 document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("user");  // Remove logged-in user
-  window.location.href = "login.html";  // Redirect to login
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
 });
+
 window.onload = function() {
   const loggedUser = localStorage.getItem("user");
   if (loggedUser !== "admin") {
@@ -90,13 +103,14 @@ window.onload = function() {
     return;
   }
 
+  // --- Manage Needs ---
   let needs = JSON.parse(localStorage.getItem("needs")) || [];
-  const tableBody = document.querySelector("#needsTable tbody");
+  const needsTableBody = document.querySelector("#needsTable tbody");
   const noNeedsMsg = document.getElementById("noNeeds");
-  const form = document.getElementById("needForm");
+  const needForm = document.getElementById("needForm");
 
   function displayNeeds() {
-    tableBody.innerHTML = "";
+    needsTableBody.innerHTML = "";
     if (needs.length === 0) {
       noNeedsMsg.style.display = "block";
       return;
@@ -106,30 +120,30 @@ window.onload = function() {
       const row = document.createElement("tr");
       row.innerHTML = `<td>${n.name}</td><td>${n.desc}</td><td>${n.category}</td><td>${n.amount}</td>
         <td><button onclick="editNeed(${i})">Edit</button><button onclick="deleteNeed(${i})">Remove</button></td>`;
-      tableBody.appendChild(row);
+      needsTableBody.appendChild(row);
     });
   }
 
-  form.addEventListener("submit", e=>{
+  needForm.addEventListener("submit", e=>{
     e.preventDefault();
     const newNeed = {
-      name: form.needName.value,
-      desc: form.needDesc.value,
-      category: form.needCategory.value,
-      amount: form.needAmount.value
+      name: needForm.needName.value,
+      desc: needForm.needDesc.value,
+      category: needForm.needCategory.value,
+      amount: needForm.needAmount.value
     };
     needs.push(newNeed);
     localStorage.setItem("needs", JSON.stringify(needs));
-    form.reset();
+    needForm.reset();
     displayNeeds();
   });
 
   window.editNeed = function(index){
     const n = needs[index];
-    form.needName.value = n.name;
-    form.needDesc.value = n.desc;
-    form.needCategory.value = n.category;
-    form.needAmount.value = n.amount;
+    needForm.needName.value = n.name;
+    needForm.needDesc.value = n.desc;
+    needForm.needCategory.value = n.category;
+    needForm.needAmount.value = n.amount;
     needs.splice(index,1);
     localStorage.setItem("needs", JSON.stringify(needs));
     displayNeeds();
@@ -144,6 +158,58 @@ window.onload = function() {
   };
 
   displayNeeds();
+
+  // --- Manage Requests ---
+  let requests = JSON.parse(localStorage.getItem("requests")) || [];
+  const requestsTableBody = document.querySelector("#requestsTable tbody");
+  const noRequestsMsg = document.getElementById("noRequests");
+
+  function displayRequests() {
+    requestsTableBody.innerHTML = "";
+    if(requests.length === 0){
+        noRequestsMsg.style.display = "block";
+        return;
+    }
+    noRequestsMsg.style.display = "none";
+    requests.forEach((r,i)=>{
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${r.requestUser}</td>
+                         <td>${r.name}</td>
+                         <td>${r.amount}</td>
+                         <td id="status-${i}">${r.status}</td>
+                         <td>
+                           <button onclick="handleRequest(${i},'Accepted')">Accept</button>
+                           <button onclick="handleRequest(${i},'Declined')">Decline</button>
+                           <button onclick="deleteRequest(${i})" style="background:#ff4d4d; color:white; margin-left:5px;">Remove</button>
+                         </td>`;
+        requestsTableBody.appendChild(row);
+    });
+  }
+
+  window.handleRequest = function(index, newStatus){
+    requests[index].status = newStatus;
+    localStorage.setItem("requests", JSON.stringify(requests));
+
+    let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    notifications.push({
+        user: requests[index].requestUser,
+        message: `Your request for "${requests[index].name}" has been ${newStatus.toLowerCase()}.`,
+        read: false
+    });
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+
+    displayRequests();
+  }
+
+  window.deleteRequest = function(index){
+    if(confirm("Remove this request?")){
+        requests.splice(index, 1);
+        localStorage.setItem("requests", JSON.stringify(requests));
+        displayRequests();
+    }
+  }
+
+  displayRequests();
 };
 </script>
 </body>
