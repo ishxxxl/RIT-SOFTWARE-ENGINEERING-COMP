@@ -304,7 +304,13 @@ const viewmoreModal = document.getElementById("viewmoreModal");
 const viewmoreTitle = document.getElementById("viewmoreTitle");
 const viewmoreList = document.getElementById("viewmoreList");
 
-function logout() { alert("Logging out"); }
+function logout() {
+  // Remove saved user info
+  localStorage.removeItem("user");
+
+  // Redirect back to login page
+  window.location.href = "login.html";
+}
 
 function renderCategories() {
   categoryMenuDiv.innerHTML = "";
