@@ -1,25 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>U-Fund Manager Dashboard</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #00a86b, #00804f);
-      color: white;
-      text-align: center;
-      padding-top: 100px;
-    }
-    a {
-      color: #fff;
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager Dashboard</title>
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url("LoginBackground.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+header {
+  background: rgba(255,255,255,0.9);
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+  color: #007f5f;
+  font-weight: 600;
+}
+.container {
+  background: rgba(255,255,255,0.9);
+  margin-top: 40px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 900px;
+}
+h2 { text-align: center; color: #007f5f; margin-bottom: 20px; }
+form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+input, select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 200px; }
+button { background: linear-gradient(135deg,#00a86b,#007f5f); color:white; border:none; padding:10px 20px; cursor:pointer; }
+button:hover { background: linear-gradient(135deg,#00b874,#009e63); transform: translateY(-2px); }
+table { width: 100%; border-collapse: collapse; text-align: center; }
+th, td { padding: 12px; border-bottom: 1px solid #ccc; }
+th { background: #00a86b; color: white; }
+td button { padding: 6px 10px; margin:0 3px; font-size:14px; }
+#noNeeds { text-align: center; color: gray; margin-top:20px; font-style: italic; }
+footer { margin-top:auto; text-align:center; padding:10px; color:white; }
+</style>
 </head>
 <body>
-  <h1>Welcome, U-Fund Manager 👋</h1>
-  <p>You can now manage fund requests and helpers here.</p>
-  <a href="index.html">Logout</a>
+<header>U-Fund Manager Dashboard</header>
+
+<div class="container">
+  <h2>Manage Needs</h2>
+  <button id="logoutBtn" style="background:#ff4d4d;margin-bottom:15px;">Logout</button>
+  <form id="needForm">
+    <input type="text" id="needName" placeholder="Need Name" required>
+    <input type="text" id="needDesc" placeholder="Description" required>
+    <select id="needCategory" required>
+      <option value="">Category</option>
+      <option value="Education">Education</option>
+      <option value="Health">Health</option>
+      <option value="Food">Food</option>
+      <option value="Other">Other</option>
+    </select>
+    <input type="number" id="needAmount" placeholder="Amount (AED)" required>
+    <button type="submit">Add Need</button>
+  </form>
+
+  <table id="needsTable">
+    <thead>
+      <tr><th>Name</th><th>Description</th><th>Category</th><th>Amount</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p id="noNeeds">No needs added yet.</p>
+</div>
+
+<footer>© 2025 NeedsConnect | Manager Portal</footer>
+
+<script>
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("user");  // Remove logged-in user
+  window.location.href = "login.html";  // Redirect to login
+});
+window.onload = function() {
+  const loggedUser = localStorage.getItem("user");
+  if (loggedUser !== "admin") {
+    alert("Access denied. Only manager (admin) can view this page.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  let needs = JSON.parse(localStorage.getItem("needs")) || [];
+  const tableBody = document.querySelector("#needsTable tbody");
+  const noNeedsMsg = document.getElementById("noNeeds");
+  const form = document.getElementById("needForm");
+
+  function displayNeeds() {
+    tableBody.innerHTML = "";
+    if (needs.length === 0) {
+      noNeedsMsg.style.display = "block";
+      return;
+    }
+    noNeedsMsg.style.display = "none";
+    needs.forEach((n,i)=>{
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${n.name}</td><td>${n.desc}</td><td>${n.category}</td><td>${n.amount}</td>
+        <td><button onclick="editNeed(${i})">Edit</button><button onclick="deleteNeed(${i})">Remove</button></td>`;
+      tableBody.appendChild(row);
+    });
+  }
+
+  form.addEventListener("submit", e=>{
+    e.preventDefault();
+    const newNeed = {
+      name: form.needName.value,
+      desc: form.needDesc.value,
+      category: form.needCategory.value,
+      amount: form.needAmount.value
+    };
+    needs.push(newNeed);
+    localStorage.setItem("needs", JSON.stringify(needs));
+    form.reset();
+    displayNeeds();
+  });
+
+  window.editNeed = function(index){
+    const n = needs[index];
+    form.needName.value = n.name;
+    form.needDesc.value = n.desc;
+    form.needCategory.value = n.category;
+    form.needAmount.value = n.amount;
+    needs.splice(index,1);
+    localStorage.setItem("needs", JSON.stringify(needs));
+    displayNeeds();
+  };
+
+  window.deleteNeed = function(index){
+    if(confirm("Remove this need?")){
+      needs.splice(index,1);
+      localStorage.setItem("needs", JSON.stringify(needs));
+      displayNeeds();
+    }
+  };
+
+  displayNeeds();
+};
+</script>
 </body>
 </html>
