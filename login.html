@@ -1,180 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeedsConnect Login</title>
-    <style>
-         body {
-            font-family: 'Poppins', sans-serif;
-            background: url("LoginBackground.png") no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px 45px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-            width: 340px;
-            text-align: center;
-            animation: fadeIn 0.8s ease;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-            transition: 0.3s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeedsConnect Login</title>
+<style>
+/* Reset default margins */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-       @keyframes fadeIn {
-           from { opacity: 0; transform: translateY(20px); }
-           to { opacity: 1; transform: translateY(0); }
-        }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url("LoginBackground.jpg") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-        .logo {
-            width: 140px; /* bigger logo */
-            margin-bottom: 10px; /* extra breathing room */
-            transition: transform 0.3s ease;
-       }
-       .logo:hover {
-           transform: scale(1.05);
-       }
-        
-        h2 {
-            text-align: center;
-            margin: 5px 0 15px 0; /* reduced top margin */
-            color: #1b5e20;
-            font-weight: 600;
-        }
+.login-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
+  width: 350px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
 
-        .input-group {
-            position: relative;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px 45px 12px 15px;
-            margin-bottom: 20px;
-            border: 1px solid #cce3d1;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+.login-card img {
+  width: 150px;
+  margin-bottom: 20px;
+}
 
-        input:focus {
-           border-color: #00a86b;
-           box-shadow: 0 0 8px rgba(0, 168, 107, 0.3);
-           outline: none;
-        }
+.login-card h2 {
+  color: #2e7d32;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
 
-        .show-pass {
-           position: absolute;
-           right: 10px;
-           top: 12px;
-           cursor: pointer;
-           font-size: 14px;
-           color: #00a86b;
-        }
-            
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #00a86b, #007f5f);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #00b874, #009e63);
-        }
-        .remember {
-            text-align: left;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #333;
-        }
+.login-card input[type="text"],
+.login-card input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #cce3d1;
+  border-radius: 8px;
+  font-size: 16px;
+}
 
-        .error {
-            color: red;
-            font-size: 14px;
-            text-align: center;
-            display: none;
-            margin-bottom: 10px;
-        }
+.password-wrapper {
+  position: relative;
+}
 
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            color: white;
-            font-size: 14px;
-        }
-    </style>
+.password-wrapper span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #00a86b;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  background: #1b5e20;
+}
+
+.remember {
+  text-align: left;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: none;
+}
+</style>
 </head>
 <body>
-    <div class="login-container">
-        <img src="Logo.png" alt="NeedsConnect Logo" class="logo">
-        <h2>NeedsConnect Login</h2>
-        <div class="error" id="error-msg">Invalid username or password</div>
-        <div class="input-group">
-            <input type="text" id="username" placeholder="Username">
-        </div>
-        <div class="input-group">
-            <input type="password" id="password" placeholder="Password">
-            <span class="show-pass" onclick="togglePassword()">👁️</span>
-        </div>
-        <div class="remember">
-            <input type="checkbox" id="rememberMe"> Remember me
-        </div>
-        <button onclick="login()">Login</button>
-    </div>
 
-    <script>
-        function togglePassword() {
-            const passField = document.getElementById('password');
-            passField.type = passField.type === 'password' ? 'text' : 'password';
-        }
-        function login() {
-            const username = document.getElementById('username').value.trim().toLowerCase();
-            const password = document.getElementById('password').value.trim();
-            const remember = document.getElementById('rememberMe').checked;
-            const errorMsg = document.getElementById('error-msg');
-            
-            if (!username || !password) {
-                errorMsg.textContent = "Please fill in both fields.";
-                errorMsg.style.display = "block";
-                return;
-            }
-            errorMsg.style.display = "none";
-            
-            if (username === "admin") {
-                alert("Welcome, U-Fund Manager! Redirecting to your dashboard...");
-                if (remember) localStorage.setItem("user", "admin");
-                setTimeout(() => {
-                    window.location.href = "manager.html";  // Redirects admin
-                }, 1000);
-            } else {
-                alert("Welcome, Helper! You’re now logged in.");
-                if (remember) localStorage.setItem("user", username);
-                setTimeout(() => {
-                    window.location.href = "helper.html";  // Redirects helper
-                }, 1000);
-            }
-        }
-        window.onload = function() {
-            const savedUser = localStorage.getItem("user");
-            if (savedUser) {
-                alert(`Welcome back, ${savedUser === "admin" ? "U-Fund Manager" : "Helper"}!`);
-            }
-        }
-    </script>
-    <footer>© 2025 NeedsConnect | Empowering Communities</footer>
+<div class="login-card">
+  <img src="newlogo.jpg" alt="NeedsConnect Logo">
+  <h2>NeedsConnect Login</h2>
+
+  <div class="error" id="error-msg">Invalid username or password</div>
+
+  <input type="text" id="username" placeholder="Username">
+
+  <div class="password-wrapper">
+    <input type="password" id="password" placeholder="Password">
+    <span onclick="togglePassword()">👁️</span>
+  </div>
+
+  <div class="remember">
+    <input type="checkbox" id="rememberMe"> Remember me
+  </div>
+
+  <button onclick="login()">Login</button>
+</div>
+
+<footer>© 2025 NeedsConnect | Empowering Communities</footer>
+
+<script>
+function togglePassword() {
+  const passField = document.getElementById('password');
+  passField.type = passField.type === 'password' ? 'text' : 'password';
+}
+
+function login() {
+  const username = document.getElementById('username').value.trim().toLowerCase();
+  const password = document.getElementById('password').value.trim();
+  const remember = document.getElementById('rememberMe').checked;
+  const errorMsg = document.getElementById('error-msg');
+
+  if (!username || !password) {
+    errorMsg.textContent = "Please fill in both fields.";
+    errorMsg.style.display = "block";
+    return;
+  }
+
+  errorMsg.style.display = "none";
+
+  localStorage.setItem("user", username); // Save logged-in user
+
+  if (username === "admin") {
+    window.location.href = "manager.html";
+  } else {
+    window.location.href = "helper.html";
+  }
+}
+
+// Auto-login if already remembered
+window.onload = function() {
+  const savedUser = localStorage.getItem("user");
+  if (!savedUser) return;
+  if (savedUser === "admin") {
+    window.location.href = "manager.html";
+  } else {
+    window.location.href = "helper.html";
+  }
+};
+</script>
+
 </body>
 </html>
