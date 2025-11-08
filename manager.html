@@ -7,7 +7,7 @@
 <style>
 body {
   font-family: 'Poppins', sans-serif;
-  background: url("LoginBackground.jpg") no-repeat center center fixed;
+  background: url("Background.jpg") no-repeat center center fixed;
   background-size: cover;
   margin: 0;
   display: flex;
@@ -17,12 +17,37 @@ body {
 }
 header {
   background: rgba(255,255,255,0.9);
-  padding: 20px;
+  padding: 15px 30px;
   width: 100%;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+header img {
+  height: 50px;
+  width: auto;
+}
+header h1 {
   font-size: 22px;
   color: #007f5f;
   font-weight: 600;
+  margin: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+#logoutBtn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+#logoutBtn:hover {
+  background: #ff6666;
+  transform: translateY(-1px);
 }
 .container {
   background: rgba(255,255,255,0.9);
@@ -48,11 +73,14 @@ footer { margin-top:auto; text-align:center; padding:10px; color:white; }
 </style>
 </head>
 <body>
-<header>U-Fund Manager Dashboard</header>
+<header>
+  <img src="Logo.jpg" alt="NeedsConnect Logo">
+  <h1>U-Fund Manager Dashboard</h1>
+  <button id="logoutBtn">Logout</button>
+</header>
 
 <div class="container">
   <h2>Manage Needs</h2>
-  <button id="logoutBtn" style="background:#ff4d4d;margin-bottom:15px;">Logout</button>
   <form id="needForm">
     <input type="text" id="needName" placeholder="Need Name" required>
     <input type="text" id="needDesc" placeholder="Description" required>
@@ -95,7 +123,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   window.location.href = "login.html";
 });
 
-window.onload = function() {
+window.onload = async function() {
   const loggedUser = localStorage.getItem("user");
   if (loggedUser !== "admin") {
     alert("Access denied. Only manager (admin) can view this page.");
@@ -103,28 +131,37 @@ window.onload = function() {
     return;
   }
 
-  // --- Manage Needs ---
-  let needs = JSON.parse(localStorage.getItem("needs")) || [];
+  const API_BASE = "http://localhost:5000/api";
   const needsTableBody = document.querySelector("#needsTable tbody");
   const noNeedsMsg = document.getElementById("noNeeds");
   const needForm = document.getElementById("needForm");
+  const requestsTableBody = document.querySelector("#requestsTable tbody");
+  const noRequestsMsg = document.getElementById("noRequests");
 
-  function displayNeeds() {
+  // --- Display Needs ---
+  async function loadNeeds() {
+    const res = await fetch(`${API_BASE}/needs`);
+    const needs = await res.json();
     needsTableBody.innerHTML = "";
     if (needs.length === 0) {
       noNeedsMsg.style.display = "block";
       return;
     }
     noNeedsMsg.style.display = "none";
-    needs.forEach((n,i)=>{
+    needs.forEach(n => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${n.name}</td><td>${n.desc}</td><td>${n.category}</td><td>${n.amount}</td>
-        <td><button onclick="editNeed(${i})">Edit</button><button onclick="deleteNeed(${i})">Remove</button></td>`;
+      row.innerHTML = `
+        <td>${n.name}</td>
+        <td>${n.description}</td>
+        <td>${n.category}</td>
+        <td>${n.amount_needed}</td>
+        <td><button onclick="deleteNeed(${n.id})">Remove</button></td>`;
       needsTableBody.appendChild(row);
     });
   }
 
-  needForm.addEventListener("submit", e=>{
+  // --- Add Need ---
+  needForm.addEventListener("submit", async e => {
     e.preventDefault();
     const newNeed = {
       name: needForm.needName.value,
@@ -132,84 +169,62 @@ window.onload = function() {
       category: needForm.needCategory.value,
       amount: needForm.needAmount.value
     };
-    needs.push(newNeed);
-    localStorage.setItem("needs", JSON.stringify(needs));
+
+    await fetch(`${API_BASE}/needs`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newNeed)
+    });
     needForm.reset();
-    displayNeeds();
+    loadNeeds();
   });
 
-  window.editNeed = function(index){
-    const n = needs[index];
-    needForm.needName.value = n.name;
-    needForm.needDesc.value = n.desc;
-    needForm.needCategory.value = n.category;
-    needForm.needAmount.value = n.amount;
-    needs.splice(index,1);
-    localStorage.setItem("needs", JSON.stringify(needs));
-    displayNeeds();
-  };
-
-  window.deleteNeed = function(index){
-    if(confirm("Remove this need?")){
-      needs.splice(index,1);
-      localStorage.setItem("needs", JSON.stringify(needs));
-      displayNeeds();
+  // --- Delete Need ---
+  window.deleteNeed = async function(id) {
+    if (confirm("Remove this need?")) {
+      await fetch(`${API_BASE}/needs/${id}`, { method: "DELETE" });
+      loadNeeds();
     }
   };
 
-  displayNeeds();
-
-  // --- Manage Requests ---
-  let requests = JSON.parse(localStorage.getItem("requests")) || [];
-  const requestsTableBody = document.querySelector("#requestsTable tbody");
-  const noRequestsMsg = document.getElementById("noRequests");
-
-  function displayRequests() {
+  // --- Load Requests ---
+  async function loadRequests() {
+    const res = await fetch(`${API_BASE}/requests`);
+    const requests = await res.json();
     requestsTableBody.innerHTML = "";
-    if(requests.length === 0){
-        noRequestsMsg.style.display = "block";
-        return;
+    if (requests.length === 0) {
+      noRequestsMsg.style.display = "block";
+      return;
     }
     noRequestsMsg.style.display = "none";
-    requests.forEach((r,i)=>{
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${r.requestUser}</td>
-                         <td>${r.name}</td>
-                         <td>${r.amount}</td>
-                         <td id="status-${i}">${r.status}</td>
-                         <td>
-                           <button onclick="handleRequest(${i},'Accepted')">Accept</button>
-                           <button onclick="handleRequest(${i},'Declined')">Decline</button>
-                           <button onclick="deleteRequest(${i})" style="background:#ff4d4d; color:white; margin-left:5px;">Remove</button>
-                         </td>`;
-        requestsTableBody.appendChild(row);
+    requests.forEach(r => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${r.requestUser}</td>
+        <td>${r.name}</td>
+        <td>${r.amount}</td>
+        <td>${r.status}</td>
+        <td>
+          <button onclick="handleRequest(${r.id}, 'Accepted')">Accept</button>
+          <button onclick="handleRequest(${r.id}, 'Declined')">Decline</button>
+        </td>`;
+      requestsTableBody.appendChild(row);
     });
   }
 
-  window.handleRequest = function(index, newStatus){
-    requests[index].status = newStatus;
-    localStorage.setItem("requests", JSON.stringify(requests));
-
-    let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-    notifications.push({
-        user: requests[index].requestUser,
-        message: `Your request for "${requests[index].name}" has been ${newStatus.toLowerCase()}.`,
-        read: false
+  // --- Handle Request ---
+  window.handleRequest = async function(id, status) {
+    await fetch(`${API_BASE}/requests/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
     });
-    localStorage.setItem("notifications", JSON.stringify(notifications));
+    loadRequests();
+    loadNeeds(); // refresh if new request accepted
+  };
 
-    displayRequests();
-  }
-
-  window.deleteRequest = function(index){
-    if(confirm("Remove this request?")){
-        requests.splice(index, 1);
-        localStorage.setItem("requests", JSON.stringify(requests));
-        displayRequests();
-    }
-  }
-
-  displayRequests();
+  loadNeeds();
+  loadRequests();
 };
 </script>
 </body>
