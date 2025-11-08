@@ -35,6 +35,11 @@
       font-weight: 600; 
       color: #005e4b; 
     }
+    header .logo {
+      height: 50px; /* adjust as needed */
+      width: auto;
+      object-fit: contain;
+    }
     header button {
       background: #007f6b;
       color: white;
@@ -233,7 +238,7 @@
 <body>
 
 <header>
-  <h1>NeedsConnect</h1>
+  <img src="Logo.jpg" alt="NeedsConnect Logo" class="logo">
   <div class="header-buttons">
     <button onclick="openBasket()">View Basket</button>
     <button onclick="logout()">Logout</button>
