@@ -14,6 +14,7 @@
       display: flex;
       flex-direction: column;
     }
+
     header {
       background: #ffffff;
       padding: 20px 40px;
@@ -25,21 +26,16 @@
       top: 0;
       z-index: 100;
     }
+
+    header h1 img {
+      height: 40px;
+    }
+
     header .header-buttons {
       display: flex;
       gap: 10px;
     }
-    header h1 {
-      margin: 0; 
-      font-size: 28px; 
-      font-weight: 600; 
-      color: #005e4b; 
-    }
-    header .logo {
-      height: 50px; /* adjust as needed */
-      width: auto;
-      object-fit: contain;
-    }
+
     header button {
       background: #007f6b;
       color: white;
@@ -49,9 +45,11 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     header button:hover { background: #005e4b; }
 
     .container { padding: 30px 40px; flex: 1; }
+
     .category-menu {
       display: flex;
       gap: 15px;
@@ -59,6 +57,7 @@
       overflow-x: auto;
       padding-bottom: 10px;
     }
+
     .category-menu button {
       background: #007f6b;
       color: white;
@@ -70,6 +69,7 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
+
     .category-menu button.active, .category-menu button:hover { background: #005e4b; }
 
     .needs-top {
@@ -77,12 +77,14 @@
       gap: 20px;
       margin-bottom: 40px;
     }
+
     .main-need {
       flex: 2;
       position: relative;
       cursor: pointer;
       height: 400px;
     }
+
     .main-need img {
       width: 100%;
       height: 100%;
@@ -90,6 +92,7 @@
       border-radius: 10px;
       display: block;
     }
+
     .main-need .overlay {
       position: absolute;
       bottom: 0;
@@ -106,7 +109,9 @@
       border-radius: 0 0 10px 10px;
       font-size: 18px;
     }
+
     .main-need:hover .overlay { opacity: 1; }
+
     .main-need .overlay button {
       background: #00a86b;
       border: none;
@@ -125,11 +130,13 @@
       gap: 10px;
       position: relative;
     }
+
     .other-needs .need-card {
       position: relative;
       cursor: pointer;
       height: 100%;
     }
+
     .other-needs .need-card img {
       width: 100%;
       height: 100%;
@@ -137,6 +144,7 @@
       border-radius: 10px;
       display: block;
     }
+
     .other-needs .need-card .overlay {
       position: absolute;
       bottom: 0;
@@ -153,7 +161,9 @@
       border-radius: 0 0 10px 10px;
       font-size: 14px;
     }
+
     .other-needs .need-card:hover .overlay { opacity: 1; }
+
     .view-more-btn {
       position: absolute;
       right: -5px;
@@ -172,42 +182,6 @@
       text-orientation: mixed;
     }
 
-    /* Basket Modal */
-    .basket-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      padding: 20px;
-      display: none;
-      z-index: 300;
-    }
-    /* Basket Modal Buttons */
-    .basket-modal button {
-      background: #00a86b; /* green color */
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: 0.3s;
-    }
-
-.basket-modal button:hover {
-  background: #007f6b; /* darker green on hover */
-}
-
-    .basket-modal.active { display: block; }
-    .basket-modal h3 { margin-top: 0; font-size: 20px; }
-    .basket-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
-    .basket-list div { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .basket-subtotal { font-weight: bold; margin-top: 10px; }
-
     /* Donation modal */
     .donation-modal {
       position: fixed;
@@ -222,15 +196,66 @@
       transition: right 0.3s ease;
       z-index: 200;
     }
+
     .donation-modal.active { right: 20px; }
+
     .donation-modal h3 { margin-top: 0; font-size: 20px; }
+
     .donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
+
     .donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+
     .donation-modal .preset-btns button {
       margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; transition: 0.2s;
     }
+
     .donation-modal .preset-btns button:hover { background: #007f6b; }
-    .donation-modal button.confirm { margin-top: 15px; width: 100%; background: #007f6b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+
+    .donation-modal button.confirm { margin-top: 15px; width: 100%; background: #00a86b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+
+    /* Basket modal */
+    .basket-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 20px;
+      display: none;
+      z-index: 300;
+    }
+
+    .basket-modal.active { display: block; }
+
+    .basket-modal h3 {
+      margin-top: 0;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .basket-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+
+    .basket-list div { display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+    .basket-subtotal { font-weight: bold; margin-top: 10px; }
+
+    .basket-modal button.checkout {
+      margin-top: 10px;
+      width: 100%;
+      background: #00a86b;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .basket-modal button.checkout:hover { background: #007f6b; }
 
     footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; }
   </style>
@@ -238,10 +263,10 @@
 <body>
 
 <header>
-  <img src="Logo.jpg" alt="NeedsConnect Logo" class="logo">
+  <h1><img src="Logo.jpg" alt="NeedsConnect Logo"></h1>
   <div class="header-buttons">
-    <button onclick="window.location.href='request.html'">Request Need</button>
     <button onclick="openBasket()">View Basket</button>
+    <button onclick="location.href='request.html'">Request Need</button>
     <button onclick="logout()">Logout</button>
   </div>
 </header>
@@ -270,22 +295,24 @@
   <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
 </div>
 
-<!-- Basket Modal -->
+<!-- Basket modal -->
 <div class="basket-modal" id="basketModal">
-  <h3>Your Basket <span style="float:right; cursor:pointer;" onclick="closeBasket()">✖</span></h3>
+  <h3>
+    Your Basket
+    <span style="cursor:pointer;" onclick="closeBasket()">✖</span>
+  </h3>
   <div class="basket-list" id="basketList"></div>
   <div class="basket-subtotal" id="basketSubtotal">Subtotal: $0</div>
-  <button onclick="checkoutBasket()">Checkout</button>
+  <button class="checkout" onclick="checkoutBasket()">Checkout</button>
 </div>
 
 <script>
-if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
+if (!localStorage.getItem("user")) window.location.href = "login.html";
 
 let allNeeds = [];
 let activeCategory = null;
 let basket = [];
 let currentNeed = null;
-let donationAmount = 0;
 
 const mainNeedDiv = document.getElementById("mainNeed");
 const otherNeedsDiv = document.getElementById("otherNeeds");
@@ -306,7 +333,7 @@ async function loadNeeds() {
     renderCategories(categories);
     renderNeeds();
   } catch (err) {
-    console.error("Error loading needs:", err);
+    console.error(err);
   }
 }
 
@@ -362,14 +389,13 @@ function openDonation(id,name,amountLeft){
   donationModal.classList.add("active");
 }
 
-function setAmount(val){ donationAmount=val; customAmount.value=val; }
+function setAmount(val){ customAmount.value=val; }
 
-async function confirmDonation(){
-  const amount=parseFloat(customAmount.value);
+function confirmDonation(){
+  const amount = parseFloat(customAmount.value);
   if(isNaN(amount)||amount<=0) return alert("Enter valid amount");
   if(amount>currentNeed.amountLeft) return alert("Cannot donate more than needed");
-  
-  // Add to basket
+
   basket.push({id: currentNeed.id, name: currentNeed.name, amount});
   updateBasketUI();
   donationModal.classList.remove("active");
@@ -392,22 +418,21 @@ function closeBasket(){ basketModal.classList.remove("active"); }
 
 async function checkoutBasket(){
   for(let item of basket){
-    await fetch(`http://localhost:5000/api/needs/${item.id}/donate`,{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({amount:item.amount})
+    await fetch(`http://localhost:5000/api/needs/${item.id}/donate`, {
+      method: "PUT",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({amount: item.amount})
     });
   }
   basket=[];
   updateBasketUI();
   basketModal.classList.remove("active");
-  loadNeeds();
+  loadNeeds(); // refresh the UI
 }
 
 function logout(){ localStorage.removeItem("user"); window.location.href="login.html"; }
 
 loadNeeds();
 </script>
-
 </body>
 </html>
