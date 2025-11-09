@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NeedsConnect ‑ Helper Dashboard</title>
+  <title>NeedsConnect - Helper Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* ========== BASE STYLING ========== */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
+      background: #f5f8f6;
       color: #333;
       min-height: 100vh;
       display: flex;
@@ -21,243 +22,151 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
-    header h1 img {
-      height: 40px;
-    }
-
-    header .header-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
+    header h1 img { height: 40px; }
+    header .header-buttons { display: flex; gap: 10px; }
     header button {
-      background: #007f6b;
+      background: #00896b;
       color: white;
       border: none;
       padding: 10px 18px;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.3s ease;
+      font-weight: 500;
     }
-
-    header button:hover { background: #005e4b; }
+    header button:hover { background: #006f57; transform: translateY(-1px); }
 
     .container { padding: 30px 40px; flex: 1; }
 
     .category-menu {
       display: flex;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       overflow-x: auto;
       padding-bottom: 10px;
     }
-
     .category-menu button {
-      background: #007f6b;
+      background: #00896b;
       color: white;
       border: none;
       padding: 10px 18px;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       transition: 0.3s;
       white-space: nowrap;
-      flex-shrink: 0;
+    }
+    .category-menu button.active, .category-menu button:hover {
+      background: #006f57;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
-    .category-menu button.active, .category-menu button:hover { background: #005e4b; }
-
-    .needs-top {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 40px;
+    .sort-section {
+      display: flex; gap: 8px; margin-bottom: 30px; align-items: center;
     }
+    .sort-section label { font-weight: 600; color: #004d3f; }
+    .sort-section select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ========== NEEDS DISPLAY ========== */
+    .needs-top { display: flex; gap: 25px; margin-bottom: 40px; align-items: stretch; }
 
     .main-need {
-      flex: 2;
-      position: relative;
-      cursor: pointer;
-      height: 400px;
+      flex: 2; position: relative; height: 400px;
+      overflow: hidden; border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
-
-    .main-need img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      display: block;
+    .main-need img { width: 100%; height: 100%; object-fit: cover; }
+    .main-need .name-label {
+      position: absolute; bottom: 0; left: 0; width: 100%;
+      padding: 16px 22px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: white; font-size: 20px; font-weight: 600;
     }
-
     .main-need .overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.4);
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-      border-radius: 0 0 10px 10px;
-      font-size: 18px;
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45);
+      color: white; padding: 20px;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; opacity: 0;
+      transition: opacity 0.3s ease-in-out; backdrop-filter: blur(3px);
     }
-
     .main-need:hover .overlay { opacity: 1; }
-
+    .progress-container { width: 100%; height: 8px; border-radius: 5px; background: rgba(255,255,255,0.3); }
+    .progress-bar { height: 8px; background: #00ff9c; transition: width 0.3s ease; }
     .main-need .overlay button {
-      background: #00a86b;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
-      font-size: 16px;
+      background: #00a86b; border: none; padding: 10px 18px; border-radius: 6px;
+      color: white; font-size: 16px; cursor: pointer;
     }
 
     .other-needs {
-      flex: 1;
-      display: grid;
+      flex: 1; display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 200px);
-      gap: 10px;
-      position: relative;
+      gap: 15px;
     }
-
-    .other-needs .need-card {
-      position: relative;
-      cursor: pointer;
-      height: 100%;
+    .need-card {
+      position: relative; overflow: hidden;
+      border-radius: 14px; box-shadow: 0 6px 16px rgba(0,0,0,0.08);
     }
-
-    .other-needs .need-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      display: block;
+    .need-card img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+    .need-card .name-label {
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; padding: 8px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: white; font-weight: 500;
     }
-
-    .other-needs .need-card .overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
+    .need-card .overlay {
+      position: absolute; inset: 0;
       background: rgba(0,0,0,0.4);
-      color: white;
-      padding: 8px;
-      opacity: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: opacity 0.3s;
-      border-radius: 0 0 10px 10px;
-      font-size: 14px;
+      color: white; padding: 12px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(3px);
+    }
+    .need-card:hover .overlay { opacity: 1; }
+    .need-card .overlay button {
+      background: #00a86b; border: none; padding: 7px 12px; border-radius: 5px;
+      cursor: pointer; color: white; font-size: 13px;
     }
 
-    .other-needs .need-card:hover .overlay { opacity: 1; }
-
-    .view-more-btn {
-      position: absolute;
-      right: -5px;
-      bottom: 0;
-      width: 40px;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 0 10px 10px 0;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
+    footer {
+      background: #006f57;
+      color: #f9f9f9;
+      text-align: center;
+      padding: 20px 0;
     }
 
-    /* Donation modal */
-    .donation-modal {
-      position: fixed;
-      top: 50%;
-      right: -400px;
-      transform: translateY(-50%);
-      width: 350px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      padding: 20px;
-      transition: right 0.3s ease;
-      z-index: 200;
+    /* ========== MODALS ========== */
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      justify-content: center; align-items: center; z-index: 200;
+    }
+    .modal-content {
+      background: white; padding: 25px; border-radius: 10px;
+      width: 300px; max-width: 90%; text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .modal-content h3 { margin-bottom: 15px; color: #004d3f; }
+    .modal-content input {
+      width: 90%; padding: 8px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    .modal-content button {
+      background: #00896b; border: none; color: white;
+      padding: 8px 14px; margin: 4px; border-radius: 6px; cursor: pointer;
     }
 
-    .donation-modal.active { right: 20px; }
-
-    .donation-modal h3 { margin-top: 0; font-size: 20px; }
-
-    .donation-modal label { display: block; margin-top: 10px; font-weight: 500; }
-
-    .donation-modal input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-
-    .donation-modal .preset-btns button {
-      margin: 5px 5px 0 0; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; background: #00a86b; color: white; transition: 0.2s;
-    }
-
-    .donation-modal .preset-btns button:hover { background: #007f6b; }
-
-    .donation-modal button.confirm { margin-top: 15px; width: 100%; background: #00a86b; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-
-    /* Basket modal */
-    .basket-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      padding: 20px;
-      display: none;
-      z-index: 300;
-    }
-
-    .basket-modal.active { display: block; }
-
-    .basket-modal h3 {
-      margin-top: 0;
-      font-size: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .basket-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
-
-    .basket-list div { display: flex; justify-content: space-between; margin-bottom: 8px; }
-
-    .basket-subtotal { font-weight: bold; margin-top: 10px; }
-
-    .basket-modal button.checkout {
-      margin-top: 10px;
-      width: 100%;
-      background: #00a86b;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .basket-modal button.checkout:hover { background: #007f6b; }
-
-    footer { background: #005e4b; color: #f9f9f9; text-align: center; padding: 20px 0; font-size: 14px; }
+    .basket-list { text-align: left; margin-top: 10px; }
+    .basket-list div { margin: 5px 0; }
   </style>
 </head>
 <body>
@@ -273,165 +182,206 @@
 
 <div class="container">
   <div class="category-menu" id="categoryMenu"></div>
+
+  <div class="sort-section">
+    <label for="sortNeeds">Sort by:</label>
+    <select id="sortNeeds">
+      <option value="priorityDesc">Priority (High → Low)</option>
+      <option value="deadlineAsc">Deadline (Nearest → Farthest)</option>
+      <option value="amountDesc">Amount (High → Low)</option>
+      <option value="amountAsc">Amount (Low → High)</option>
+    </select>
+  </div>
+
   <div class="needs-top">
     <div class="main-need" id="mainNeed"></div>
     <div class="other-needs" id="otherNeeds"></div>
   </div>
 </div>
 
-<footer>© 2025 NeedsConnect | Empowering Communities</footer>
-
-<!-- Donation modal -->
-<div class="donation-modal" id="donationModal">
-  <h3 id="donationTitle">Donate</h3>
-  <label>Select Amount:</label>
-  <div class="preset-btns">
-    <button onclick="setAmount(5)">$5</button>
-    <button onclick="setAmount(10)">$10</button>
-    <button onclick="setAmount(20)">$20</button>
+<!-- Donation Modal -->
+<div id="donationModal" class="modal">
+  <div class="modal-content">
+    <h3 id="donationTitle"></h3>
+    <input type="number" id="donationAmount" placeholder="Enter amount" min="1">
+    <div>
+      <button onclick="addToBasket()">Add to Basket</button>
+      <button onclick="closeModal('donationModal')">Cancel</button>
+    </div>
   </div>
-  <label>Or custom amount:</label>
-  <input type="number" id="customAmount" min="1" max="1000" placeholder="Max $1000">
-  <button class="confirm" onclick="confirmDonation()">Add to Basket</button>
 </div>
 
-<!-- Basket modal -->
-<div class="basket-modal" id="basketModal">
-  <h3>
-    Your Basket
-    <span style="cursor:pointer;" onclick="closeBasket()">✖</span>
-  </h3>
-  <div class="basket-list" id="basketList"></div>
-  <div class="basket-subtotal" id="basketSubtotal">Subtotal: $0</div>
-  <button class="checkout" onclick="checkoutBasket()">Checkout</button>
+<!-- Basket Modal -->
+<div id="basketModal" class="modal">
+  <div class="modal-content">
+    <h3>Your Basket</h3>
+    <div class="basket-list" id="basketList"></div>
+    <p><strong>Total: $<span id="basketTotal">0</span></strong></p>
+    <button onclick="checkout()">Checkout</button>
+    <button onclick="closeModal('basketModal')">Close</button>
+  </div>
 </div>
+
+<footer>© 2025 NeedsConnect | Empowering Communities</footer>
 
 <script>
 if (!localStorage.getItem("user")) window.location.href = "login.html";
 
 let allNeeds = [];
 let activeCategory = null;
-let basket = [];
+let basket = JSON.parse(localStorage.getItem("basket")) || [];
 let currentNeed = null;
 
 const mainNeedDiv = document.getElementById("mainNeed");
 const otherNeedsDiv = document.getElementById("otherNeeds");
 const categoryMenuDiv = document.getElementById("categoryMenu");
+const sortSelect = document.getElementById("sortNeeds");
+
 const donationModal = document.getElementById("donationModal");
-const donationTitle = document.getElementById("donationTitle");
-const customAmount = document.getElementById("customAmount");
 const basketModal = document.getElementById("basketModal");
+const donationTitle = document.getElementById("donationTitle");
+const donationAmountInput = document.getElementById("donationAmount");
 const basketList = document.getElementById("basketList");
-const basketSubtotal = document.getElementById("basketSubtotal");
+const basketTotal = document.getElementById("basketTotal");
+
+const priorityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
 
 async function loadNeeds() {
-  try {
-    const res = await fetch("http://localhost:5000/api/needs");
-    allNeeds = await res.json();
-    const categories = [...new Set(allNeeds.map(n => n.category))];
-    activeCategory = categories[0] || null;
-    renderCategories(categories);
-    renderNeeds();
-  } catch (err) {
-    console.error(err);
-  }
+  const res = await fetch("http://localhost:5000/api/needs");
+  allNeeds = await res.json();
+  const categories = [...new Set(allNeeds.map(n => n.category))];
+  activeCategory = activeCategory || categories[0];
+  renderCategories(categories);
+  renderNeeds();
 }
 
-function renderCategories(categories){
+function renderCategories(categories) {
   categoryMenuDiv.innerHTML = "";
   categories.forEach(cat => {
     const btn = document.createElement("button");
     btn.textContent = cat;
-    if(cat===activeCategory) btn.classList.add("active");
+    if (cat === activeCategory) btn.classList.add("active");
     btn.onclick = () => { activeCategory = cat; renderNeeds(); renderCategories(categories); };
     categoryMenuDiv.appendChild(btn);
   });
 }
 
+function sortNeedsData(needs, sortType) {
+  return needs.sort((a, b) => {
+    switch (sortType) {
+      case "priorityDesc": return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+      case "deadlineAsc": return new Date(a.deadline || Infinity) - new Date(b.deadline || Infinity);
+      case "amountDesc": return b.amount_needed - a.amount_needed;
+      case "amountAsc": return a.amount_needed - b.amount_needed;
+      default: return 0;
+    }
+  });
+}
+
 function renderNeeds() {
-  if(!activeCategory) return;
-  const needs = allNeeds.filter(n => n.category===activeCategory);
-  if(needs.length===0){ mainNeedDiv.innerHTML="<p>No needs available.</p>"; otherNeedsDiv.innerHTML=""; return; }
+  const needs = sortNeedsData(allNeeds.filter(n => n.category === activeCategory), sortSelect.value);
+  if (!needs.length) return mainNeedDiv.innerHTML = "<p>No needs available.</p>";
 
-  const first = needs[0];
-  mainNeedDiv.innerHTML=`
-    <img src="${first.image_url}" alt="${first.name}">
+  const [first, ...others] = needs;
+  renderMain(first);
+  renderOthers(others.slice(0, 4));
+}
+
+function renderMain(n) {
+  const percent = Math.min(100, Math.round((n.amount_fulfilled / (n.amount_fulfilled + n.amount_needed)) * 100) || 0);
+  mainNeedDiv.innerHTML = `
+    <img src="${n.image_url}" alt="${n.name}">
+    <div class="name-label">${n.name} — $${n.amount_needed}</div>
     <div class="overlay">
-      <span>${first.name} — $${first.amount_needed}</span>
-      <button ${first.amount_needed<=0?"disabled":""} onclick="openDonation(${first.id}, '${first.name}', ${first.amount_needed})">
-        ${first.amount_needed<=0?"Fulfilled":"Donate"}
-      </button>
-    </div>
-  `;
+      <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
+      <small>${percent}% funded</small>
+      <button onclick="openDonation(${n.id}, '${n.name}', ${n.amount_needed})">Donate</button>
+    </div>`;
+}
 
-  otherNeedsDiv.innerHTML="";
-  needs.slice(1,5).forEach(n=>{
-    const div=document.createElement("div");
-    div.className="need-card";
-    div.innerHTML=`
+function renderOthers(needs) {
+  otherNeedsDiv.innerHTML = "";
+  needs.forEach(n => {
+    const percent = Math.min(100, Math.round((n.amount_fulfilled / (n.amount_fulfilled + n.amount_needed)) * 100) || 0);
+    const div = document.createElement("div");
+    div.className = "need-card";
+    div.innerHTML = `
       <img src="${n.image_url}" alt="${n.name}">
+      <div class="name-label">${n.name} — $${n.amount_needed}</div>
       <div class="overlay">
-        <span>${n.name} — $${n.amount_needed}</span>
-        <button ${n.amount_needed<=0?"disabled":""} onclick="openDonation(${n.id}, '${n.name}', ${n.amount_needed})">
-          ${n.amount_needed<=0?"Fulfilled":"Donate"}
-        </button>
-      </div>
-    `;
+        <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
+        <small>${percent}% funded</small>
+        <button onclick="openDonation(${n.id}, '${n.name}', ${n.amount_needed})">Donate</button>
+      </div>`;
     otherNeedsDiv.appendChild(div);
   });
 }
 
-function openDonation(id,name,amountLeft){
-  if(amountLeft<=0) return alert("This need is already fulfilled!");
-  currentNeed={id,name,amountLeft};
-  donationTitle.textContent=`Donate to "${name}"`;
-  customAmount.value="";
-  donationModal.classList.add("active");
+/* ========== DONATION MODAL ========== */
+function openDonation(id, name, amountLeft) {
+  currentNeed = { id, name, amountLeft };
+  donationTitle.textContent = `Donate to ${name}`;
+  donationAmountInput.value = "";
+  donationModal.style.display = "flex";
 }
 
-function setAmount(val){ customAmount.value=val; }
-
-function confirmDonation(){
-  const amount = parseFloat(customAmount.value);
-  if(isNaN(amount)||amount<=0) return alert("Enter valid amount");
-  if(amount>currentNeed.amountLeft) return alert("Cannot donate more than needed");
-
-  basket.push({id: currentNeed.id, name: currentNeed.name, amount});
-  updateBasketUI();
-  donationModal.classList.remove("active");
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
 }
 
-function updateBasketUI(){
-  basketList.innerHTML="";
-  let subtotal=0;
-  basket.forEach(item=>{
-    const div=document.createElement("div");
-    div.innerHTML=`<span>${item.name}</span><span>$${item.amount}</span>`;
+/* ========== BASKET ========== */
+function addToBasket() {
+  const amount = parseFloat(donationAmountInput.value);
+  if (!amount || amount <= 0) return alert("Enter a valid amount.");
+  basket.push({ ...currentNeed, amount });
+  localStorage.setItem("basket", JSON.stringify(basket));
+  closeModal("donationModal");
+  alert("Added to basket!");
+}
+
+function openBasket() {
+  basketModal.style.display = "flex";
+  renderBasket();
+}
+
+function renderBasket() {
+  basketList.innerHTML = "";
+  let total = 0;
+  basket.forEach((item, i) => {
+    total += item.amount;
+    const div = document.createElement("div");
+    div.innerHTML = `${item.name}: $${item.amount.toFixed(2)} <button onclick="removeFromBasket(${i})">x</button>`;
     basketList.appendChild(div);
-    subtotal+=item.amount;
   });
-  basketSubtotal.textContent=`Subtotal: $${subtotal}`;
+  basketTotal.textContent = total.toFixed(2);
 }
 
-function openBasket(){ basketModal.classList.add("active"); }
-function closeBasket(){ basketModal.classList.remove("active"); }
+function removeFromBasket(i) {
+  basket.splice(i, 1);
+  localStorage.setItem("basket", JSON.stringify(basket));
+  renderBasket();
+}
 
-async function checkoutBasket(){
-  for(let item of basket){
-    await fetch(`http://localhost:5000/api/needs/${item.id}/donate`, {
-      method: "PUT",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({amount: item.amount})
+/* ========== CHECKOUT ========== */
+async function checkout() {
+  if (!basket.length) return alert("Your basket is empty.");
+  for (const donation of basket) {
+    await fetch(`http://localhost:5000/api/needs/${donation.id}/donate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: donation.amount })
     });
   }
-  basket=[];
-  updateBasketUI();
-  basketModal.classList.remove("active");
-  loadNeeds(); // refresh the UI
+  alert("Donation successful!");
+  basket = [];
+  localStorage.removeItem("basket");
+  closeModal("basketModal");
+  await loadNeeds();
 }
 
-function logout(){ localStorage.removeItem("user"); window.location.href="login.html"; }
-
+/* ========== GENERAL ========== */
+sortSelect.addEventListener("change", renderNeeds);
+function logout() { localStorage.removeItem("user"); window.location.href = "login.html"; }
 loadNeeds();
 </script>
 </body>
