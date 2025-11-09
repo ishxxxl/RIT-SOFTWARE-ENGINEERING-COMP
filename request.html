@@ -6,181 +6,383 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: url("DashboardBackground.jpg") no-repeat center center fixed;
-      background-size: cover;
+      background-color: #97cf8a;
       margin: 0;
       padding: 0;
+    }
+
+    header {
+      background-color: #ffffff;
+      color: #850000;
+      padding: 10px 25px;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      min-height: 100vh;
+      border-bottom: 2px solid #ddd;
     }
-    .request-container {
-      background-color: rgba(255, 255, 255, 0.95);
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-      width: 400px;
-      text-align: center;
-      margin-top: 20px;
-    }
-    h2 { color: #006b3c; margin-bottom: 20px; }
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #00a86b;
+
+    .logo img { height: 40px; }
+
+    .back-btn {
+      background-color: #850000;
       color: white;
       border: none;
       border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      font-size: 16px;
+      transition: 0.3s;
     }
-    button:hover { background: #009e63; }
-    .my-requests, .notifications {
-      width: 400px;
-      margin-top: 20px;
-      background-color: rgba(255, 255, 255, 0.95);
+    .back-btn:hover { background-color: #a70000; }
+
+    .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
       border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #025928;
+      margin-bottom: 20px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    label {
+      color: #025928;
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      background-color: #025928;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button.submit-btn:hover { background-color: #038C33; }
+
+    .request-list {
+      margin-top: 30px;
+      background-color: #fff;
       padding: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    h3 { margin-top: 0; color: #006b3c; }
-    .request-item, .notification-item {
-      border-bottom: 1px solid #ccc;
-      padding: 8px 0;
-      text-align: left;
+
+    .request-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
     }
-    .accepted { color: green; font-weight: bold; }
-    .declined { color: red; font-weight: bold; }
+    .request-item:last-child { border-bottom: none; }
+
+    .status { font-weight: bold; }
+    .status.Pending { color: #b8860b; }
+    .status.Accepted { color: #028a0f; }
+    .status.Declined { color: #c00000; }
+
+    .priority-Critical { color: #d32f2f; font-weight: bold; }
+    .priority-High { color: #ff8800; font-weight: bold; }
+    .priority-Medium { color: #007f5f; }
+    .priority-Low { color: #555; }
+
+    .progress-bar-container {
+      background:#eee; border-radius:8px;
+      height:10px; width:100%; margin-top:5px;
+    }
+    .progress-bar {
+      height:10px; border-radius:8px;
+      background:#00a86b; transition:width 0.3s ease;
+    }
+
+    .request-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .left-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+    }
+
+    .legend .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .sort-section {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* 👈 Keeps "Sort by:" aligned left */
+      gap: 8px;
+    }
+
+    .sort-section select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .export-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .export-btns button {
+      background: #007f5f;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .export-btns button:hover {
+      background: #009e63;
+    }
+
   </style>
 </head>
 <body>
 
-<div class="request-container">
-  <h2>Request a Need</h2>
-  <input type="text" id="needName" placeholder="Name of the Need">
-  <input type="text" id="requestUsername" placeholder="Username">
-  <input type="number" id="amount" placeholder="Amount (AED)" min="0">
-  <select id="category">
-    <option value="">Select Category</option>
-    <option value="Education">Education</option>
-    <option value="Health">Health</option>
-    <option value="Relief">Relief</option>
-    <option value="Infrastructure">Infrastructure</option>
-  </select>
-  <textarea id="description" rows="4" placeholder="Description of the need"></textarea>
-  <button onclick="submitNeed()">Submit Request</button>
-</div>
+  <header>
+    <div class="logo">
+      <img src="Logo.jpg" alt="NeedsConnect Logo">
+    </div>
+    <button class="back-btn" onclick="goBack()">Back to Helper Page</button>
+  </header>
 
-<div class="my-requests">
-  <h3>My Requests</h3>
-  <div id="requestsList">No requests yet.</div>
-</div>
+  <div class="container">
+    <h2>Request a Need</h2>
 
-<div class="notifications">
-  <h3>Notifications</h3>
-  <div id="notificationsList">No notifications yet.</div>
-</div>
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="number" id="amount_needed" placeholder="Amount Needed (USD)" required>
 
-<script>
-function submitNeed() {
-  const name = document.getElementById('needName').value.trim();
-  const category = document.getElementById('category').value;
-  const desc = document.getElementById('description').value.trim();
-  const requestUser = document.getElementById('requestUsername').value.trim();
-  const amount = document.getElementById('amount').value.trim();
+    <select id="category" required>
+      <option value="">Select Category</option>
+      <option value="Infrastructure">Infrastructure</option>
+      <option value="Education">Education</option>
+      <option value="Health">Health</option>
+      <option value="Community">Community</option>
+    </select>
 
-  if (!name || !category || !desc || !requestUser || !amount) {
-    alert("Please fill out all fields!");
-    return;
-  }
-  
-  let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-  notifications.push({ message: `Request for "${name}" submitted successfully!` });
-  localStorage.setItem('notifications', JSON.stringify(notifications));
+    <select id="priority" required>
+      <option value="">Select Priority</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+      <option value="Critical">Critical</option>
+    </select>
 
-  let requests = JSON.parse(localStorage.getItem('requests') || '[]');
-  notifications.push({ message: `Request for "${name}" submitted successfully!` });
-  localStorage.setItem('notifications', JSON.stringify(notifications));
-  
-  
-  requests.push({
-    name,
-    category,
-    description: desc,
-    requestUser,
-    amount,
-    status: "Pending"
-  });
-  localStorage.setItem('requests', JSON.stringify(requests));
+    <label for="deadline">Need Deadline:</label>
+    <input type="date" id="deadline">
 
-  alert("Your need has been requested successfully!");
+    <textarea id="description" placeholder="Description (optional)"></textarea>
+    <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
 
-  document.getElementById('needName').value = '';
-  document.getElementById('category').value = '';
-  document.getElementById('description').value = '';
-  document.getElementById('requestUsername').value = '';
-  document.getElementById('amount').value = '';
+    <div class="request-list" id="requestList">
+      <h3 style="text-align:center; color:#025928;">My Requests</h3>
 
-  renderRequests();
-}
+      <div class="request-controls">
+        <div class="left-controls">
+          <div class="legend">
+            <span><span class="dot" style="background:#028a0f;"></span>Accepted</span>
+            <span><span class="dot" style="background:#b8860b;"></span>Pending</span>
+            <span><span class="dot" style="background:#c00000;"></span>Declined</span>
+          </div>
 
-function renderRequests() {
-  const requestsList = document.getElementById('requestsList');
-  let requests = JSON.parse(localStorage.getItem('requests') || '[]');
+          <!-- ✅ Only change made below -->
+          <div class="sort-section">
+            <label for="sortRequests">Sort by:</label>
+            <select id="sortRequests">
+              <option value="priorityDesc">Priority (High → Low)</option>
+              <option value="deadlineAsc">Deadline (Nearest → Farthest)</option>
+              <option value="amountDesc">Amount (High → Low)</option>
+              <option value="amountAsc">Amount (Low → High)</option>
+            </select>
+          </div>
+        </div>
 
-  if (requests.length === 0) {
-    requestsList.innerHTML = "No requests yet.";
-    return;
-  }
+        <div class="export-btns">
+          <button onclick="exportToPDF()">Export PDF</button>
+          <button onclick="exportToExcel()">Export Excel</button>
+        </div>
+      </div>
 
-  requestsList.innerHTML = "";
-  requests.forEach(r => {
-    const div = document.createElement('div');
-    div.className = 'request-item';
-    const statusClass = r.status.toLowerCase() === "accepted" ? "accepted" : (r.status.toLowerCase() === "declined" ? "declined" : "");
-    div.innerHTML = `<strong>${r.name}</strong> (${r.category})<br>
-                     Description: ${r.description}<br>
-                     Username: ${r.requestUser}<br>
-                     Amount: AED ${r.amount}<br>
-                     Status: <span class="${statusClass}">${r.status}</span>`;
-    requestsList.appendChild(div);
-  });
-}
+      <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+      <div id="requests"></div>
+    </div>
+  </div>
 
-function renderNotifications() {
-  const notificationsList = document.getElementById('notificationsList');
-  let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  if (notifications.length === 0) {
-    notificationsList.innerHTML = "No notifications yet.";
-    return;
-  }
+  <script>
+    const API_BASE = "http://localhost:5000/api";
+    const priorityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+    const sortSelect = document.getElementById("sortRequests");
 
-  notificationsList.innerHTML = "";
-  notifications.forEach(n => {
-    const div = document.createElement('div');
-    div.className = 'notification-item';
-    div.innerHTML = n.message;
-    notificationsList.appendChild(div);
-  });
-}
+    async function submitRequest() {
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const category = document.getElementById("category").value;
+      const amount_needed = document.getElementById("amount_needed").value;
+      const priority = document.getElementById("priority").value;
+      const deadline = document.getElementById("deadline").value;
 
-// Initial render
-window.onload = function() {
-  renderRequests();
-  renderNotifications();
-};
-</script>
+      if (!name || !category || !amount_needed || !priority) {
+        alert("Please fill in all required fields.");
+        return;
+      }
 
+      try {
+        const res = await fetch(`${API_BASE}/requests`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, description, category, amount_needed, priority, deadline })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Server error");
+
+        alert("✅ Request submitted successfully!");
+        document.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
+        fetchRequests();
+      } catch (error) {
+        alert("Server error. Please try again later.");
+        console.error("❌ Error submitting request:", error);
+      }
+    }
+
+    function sortRequestsData(requests, sortType) {
+      return requests.sort((a, b) => {
+        switch (sortType) {
+          case "priorityDesc":
+            return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+          case "deadlineAsc":
+            return new Date(a.deadline || Infinity) - new Date(b.deadline || Infinity);
+          case "amountDesc":
+            return b.amount_needed - a.amount_needed;
+          case "amountAsc":
+            return a.amount_needed - b.amount_needed;
+          default:
+            return 0;
+        }
+      });
+    }
+
+    async function fetchRequests() {
+      try {
+        const res = await fetch(`${API_BASE}/requests`);
+        let data = await res.json();
+        data = sortRequestsData(data, sortSelect.value);
+
+        const container = document.getElementById("requests");
+        container.innerHTML = "";
+
+        if (data.length === 0) {
+          container.innerHTML = "<p>No requests yet.</p>";
+          return;
+        }
+
+        data.forEach(req => {
+          const formattedDeadline = req.deadline ? new Date(req.deadline).toLocaleDateString() : "—";
+          const fulfilled = req.amount_fulfilled || 0;
+          const goal = fulfilled + req.amount_needed;
+          const percent = goal > 0 ? Math.round((fulfilled / goal) * 100) : 100;
+
+          const div = document.createElement("div");
+          div.classList.add("request-item");
+          div.innerHTML = `
+            <strong>${req.name}</strong> (${req.category})<br>
+            Priority: <span class="priority-${req.priority}">${req.priority}</span><br>
+            Deadline: ${formattedDeadline}<br>
+            Amount Needed: $${Number(req.amount_needed).toFixed(2)}<br>
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width:${percent}%;background:${percent===100?'#028a0f':'#00a86b'}"></div>
+            </div>
+            <small>${percent}% fulfilled</small><br>
+            <em>${req.description || "No description provided"}</em><br>
+            <span class="status ${req.status}">Status: ${req.status}</span>
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error("❌ Error fetching requests:", error);
+      }
+    }
+
+    sortSelect.addEventListener("change", fetchRequests);
+    setInterval(fetchRequests, 3000);
+
+    async function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("My Requests - NeedsConnect", 10, 10);
+      const rows = Array.from(document.querySelectorAll("#requests .request-item")).map(el => el.innerText.split("\n").join(" | "));
+      let y = 20;
+      rows.forEach(line => { doc.text(line, 10, y); y += 8; if (y > 270) { doc.addPage(); y = 20; }});
+      doc.save("My_Requests.pdf");
+    }
+
+    async function exportToExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = Array.from(document.querySelectorAll("#requests .request-item")).map(div => [div.innerText]);
+      const ws = XLSX.utils.aoa_to_sheet([["Requests Summary"], ...data]);
+      XLSX.utils.book_append_sheet(wb, ws, "Requests");
+      XLSX.writeFile(wb, "My_Requests.xlsx");
+    }
+
+    function goBack() { window.location.href = "helper.html"; }
+    fetchRequests();
+  </script>
 </body>
 </html>
