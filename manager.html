@@ -24,10 +24,7 @@ header {
   justify-content: space-between;
   box-sizing: border-box;
 }
-header img {
-  height: 50px;
-  width: auto;
-}
+header img { height: 50px; width: auto; }
 header h1 {
   font-size: 22px;
   color: #007f5f;
@@ -37,38 +34,62 @@ header h1 {
   text-align: center;
 }
 #logoutBtn {
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
+  background: #ff4d4d; color: white; border: none;
+  padding: 8px 16px; border-radius: 6px;
+  cursor: pointer; font-weight: 500;
 }
-#logoutBtn:hover {
-  background: #ff6666;
-  transform: translateY(-1px);
-}
+#logoutBtn:hover { background: #ff6666; transform: translateY(-1px); }
+
 .container {
   background: rgba(255,255,255,0.9);
-  margin-top: 40px;
-  padding: 30px;
+  margin-top: 40px; padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  width: 90%;
-  max-width: 900px;
-  margin-bottom: 30px;
+  width: 90%; max-width: 950px; margin-bottom: 30px;
 }
 h2 { text-align: center; color: #007f5f; margin-bottom: 20px; }
 form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
 input, select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 200px; }
-button { background: linear-gradient(135deg,#00a86b,#007f5f); color:white; border:none; padding:10px 20px; cursor:pointer; }
+button { background: linear-gradient(135deg,#00a86b,#007f5f); color:white; border:none; padding:10px 20px; cursor:pointer; border-radius:6px; }
 button:hover { background: linear-gradient(135deg,#00b874,#009e63); transform: translateY(-2px); }
+.sort-section { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.sort-section label { font-weight:500; margin-right:8px; color:#007f5f; }
+.export-btns button {
+  background:#007f5f; color:white; border:none;
+  padding:8px 12px; border-radius:5px; margin-left:6px;
+  cursor:pointer; font-size:13px;
+}
+.export-btns button:hover { background:#009e63; }
+
 table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom:20px; }
 th, td { padding: 12px; border-bottom: 1px solid #ccc; }
 th { background: #00a86b; color: white; }
-td button { padding: 6px 10px; margin:0 3px; font-size:14px; }
+td button { padding: 6px 10px; margin:0 3px; font-size:14px; border-radius:5px; }
+.remove-btn { background:#ff4d4d; }
+.remove-btn:hover { background:#ff6666; }
+.priority-High { color: #ff8800; font-weight: bold; }
+.priority-Critical { color: #d32f2f; font-weight: bold; }
+.priority-Medium { color: #007f5f; }
+.priority-Low { color: #666; }
 #noNeeds, #noRequests { text-align: center; color: gray; margin-top:20px; font-style: italic; }
+
+.progress-bar-container {
+  background:#eee; border-radius:8px; height:10px; width:100%; margin-top:5px;
+}
+.progress-bar {
+  height:10px; border-radius:8px; background:#00a86b; transition:width 0.3s ease;
+}
+.legend {
+  display:flex; justify-content:center; gap:15px; margin-bottom:10px;
+}
+.legend span {
+  display:flex; align-items:center; gap:5px;
+  font-size:13px;
+}
+.legend .dot {
+  width:12px; height:12px; border-radius:50%;
+  display:inline-block;
+}
 footer { margin-top:auto; text-align:center; padding:10px; color:white; }
 </style>
 </head>
@@ -91,13 +112,36 @@ footer { margin-top:auto; text-align:center; padding:10px; color:white; }
       <option value="Food">Food</option>
       <option value="Other">Other</option>
     </select>
-    <input type="number" id="needAmount" placeholder="Amount (AED)" required>
+    <input type="number" id="needAmount" placeholder="Amount (USD)" required>
+    <select id="needPriority" required>
+      <option value="Low">Low</option>
+      <option value="Medium" selected>Medium</option>
+      <option value="High">High</option>
+      <option value="Critical">Critical</option>
+    </select>
+    <input type="date" id="needDeadline" placeholder="Deadline (optional)">
     <button type="submit">Add Need</button>
   </form>
 
+  <div class="sort-section">
+    <div>
+      <label for="sortNeeds">Sort by:</label>
+      <select id="sortNeeds">
+        <option value="priorityDesc">Priority (High → Low)</option>
+        <option value="deadlineAsc">Deadline (Nearest → Farthest)</option>
+        <option value="amountDesc">Donation (High → Low)</option>
+        <option value="amountAsc">Donation (Low → High)</option>
+      </select>
+    </div>
+    <div class="export-btns">
+      <button onclick="exportToPDF()">Export PDF</button>
+      <button onclick="exportToExcel()">Export Excel</button>
+    </div>
+  </div>
+
   <table id="needsTable">
     <thead>
-      <tr><th>Name</th><th>Description</th><th>Category</th><th>Amount</th><th>Actions</th></tr>
+      <tr><th>Name</th><th>Description</th><th>Category</th><th>Priority</th><th>Deadline</th><th>Amount (USD)</th><th>Progress</th><th>Actions</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -106,9 +150,25 @@ footer { margin-top:auto; text-align:center; padding:10px; color:white; }
 
 <div class="container">
   <h2>User Requests</h2>
+  <div class="legend">
+    <span><span class="dot" style="background:#028a0f;"></span>Accepted</span>
+    <span><span class="dot" style="background:#b8860b;"></span>Pending</span>
+    <span><span class="dot" style="background:#c00000;"></span>Declined</span>
+  </div>
+
+  <div class="sort-section">
+    <label for="sortRequests">Sort by:</label>
+    <select id="sortRequests">
+      <option value="priorityDesc">Priority (High → Low)</option>
+      <option value="deadlineAsc">Deadline (Nearest → Farthest)</option>
+      <option value="amountDesc">Donation (High → Low)</option>
+      <option value="amountAsc">Donation (Low → High)</option>
+    </select>
+  </div>
+
   <table id="requestsTable">
     <thead>
-      <tr><th>User</th><th>Need</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+      <tr><th>Need</th><th>Amount (USD)</th><th>Priority</th><th>Deadline</th><th>Status</th><th>Actions</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -117,6 +177,8 @@ footer { margin-top:auto; text-align:center; padding:10px; color:white; }
 
 <footer>© 2025 NeedsConnect | Manager Portal</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("user");
@@ -137,49 +199,105 @@ window.onload = async function() {
   const needForm = document.getElementById("needForm");
   const requestsTableBody = document.querySelector("#requestsTable tbody");
   const noRequestsMsg = document.getElementById("noRequests");
+  const sortNeeds = document.getElementById("sortNeeds");
+  const sortRequests = document.getElementById("sortRequests");
 
-  // --- Display Needs ---
+  const priorityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+
   async function loadNeeds() {
     const res = await fetch(`${API_BASE}/needs`);
-    const needs = await res.json();
+    let needs = await res.json();
+    needs = sortItems(needs, sortNeeds.value);
+
     needsTableBody.innerHTML = "";
-    if (needs.length === 0) {
-      noNeedsMsg.style.display = "block";
-      return;
-    }
+    if (needs.length === 0) { noNeedsMsg.style.display = "block"; return; }
     noNeedsMsg.style.display = "none";
+
     needs.forEach(n => {
+      const formattedDeadline = n.deadline ? new Date(n.deadline).toLocaleDateString() : "—";
+      const amountDisplay = n.amount_needed <= 0
+        ? "<span style='color:#028a0f;font-weight:bold;'>Fulfilled</span>"
+        : `$${Number(n.amount_needed).toFixed(2)}`;
+      const fulfilled = n.amount_fulfilled || 0;
+      const goal = fulfilled + n.amount_needed;
+      const percent = goal > 0 ? Math.round((fulfilled / goal) * 100) : 100;
+
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${n.name}</td>
         <td>${n.description}</td>
         <td>${n.category}</td>
-        <td>${n.amount_needed}</td>
+        <td class="priority-${n.priority}">${n.priority}</td>
+        <td>${formattedDeadline}</td>
+        <td>${amountDisplay}</td>
+        <td>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:${percent}%;background:${percent===100?"#028a0f":"#00a86b"}"></div>
+          </div>
+          <small>${percent}%</small>
+        </td>
         <td><button onclick="deleteNeed(${n.id})">Remove</button></td>`;
       needsTableBody.appendChild(row);
     });
   }
 
-  // --- Add Need ---
+  async function loadRequests() {
+    const res = await fetch(`${API_BASE}/requests`);
+    let requests = await res.json();
+    requests = sortItems(requests, sortRequests.value);
+
+    requestsTableBody.innerHTML = "";
+    if (requests.length === 0) { noRequestsMsg.style.display = "block"; return; }
+    noRequestsMsg.style.display = "none";
+
+    requests.forEach(r => {
+      const formattedDeadline = r.deadline ? new Date(r.deadline).toLocaleDateString() : "—";
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${r.name}</td>
+        <td>$${Number(r.amount_needed).toFixed(2)}</td>
+        <td class="priority-${r.priority || 'Medium'}">${r.priority || 'Medium'}</td>
+        <td>${formattedDeadline}</td>
+        <td style="color:${r.status==='Accepted'?'#028a0f':r.status==='Declined'?'#c00000':'#b8860b'};font-weight:bold;">${r.status}</td>
+        <td>
+          <button onclick="handleRequest(${r.id}, 'Accepted')">Accept</button>
+          <button onclick="handleRequest(${r.id}, 'Declined')">Decline</button>
+          <button class="remove-btn" onclick="removeRequest(${r.id})">Remove</button>
+        </td>`;
+      requestsTableBody.appendChild(row);
+    });
+  }
+
+  function sortItems(list, type) {
+    return list.sort((a, b) => {
+      switch (type) {
+        case "priorityDesc": return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+        case "deadlineAsc": return new Date(a.deadline || Infinity) - new Date(b.deadline || Infinity);
+        case "amountDesc": return b.amount_needed - a.amount_needed;
+        case "amountAsc": return a.amount_needed - b.amount_needed;
+        default: return 0;
+      }
+    });
+  }
+
   needForm.addEventListener("submit", async e => {
     e.preventDefault();
     const newNeed = {
       name: needForm.needName.value,
       desc: needForm.needDesc.value,
       category: needForm.needCategory.value,
-      amount: needForm.needAmount.value
+      amount: needForm.needAmount.value,
+      priority: needForm.needPriority.value,
+      deadline: needForm.needDeadline.value
     };
-
     await fetch(`${API_BASE}/needs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newNeed)
     });
-    needForm.reset();
-    loadNeeds();
+    needForm.reset(); loadNeeds();
   });
 
-  // --- Delete Need ---
   window.deleteNeed = async function(id) {
     if (confirm("Remove this need?")) {
       await fetch(`${API_BASE}/needs/${id}`, { method: "DELETE" });
@@ -187,44 +305,51 @@ window.onload = async function() {
     }
   };
 
-  // --- Load Requests ---
-  async function loadRequests() {
-    const res = await fetch(`${API_BASE}/requests`);
-    const requests = await res.json();
-    requestsTableBody.innerHTML = "";
-    if (requests.length === 0) {
-      noRequestsMsg.style.display = "block";
-      return;
-    }
-    noRequestsMsg.style.display = "none";
-    requests.forEach(r => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${r.requestUser}</td>
-        <td>${r.name}</td>
-        <td>${r.amount}</td>
-        <td>${r.status}</td>
-        <td>
-          <button onclick="handleRequest(${r.id}, 'Accepted')">Accept</button>
-          <button onclick="handleRequest(${r.id}, 'Declined')">Decline</button>
-        </td>`;
-      requestsTableBody.appendChild(row);
-    });
-  }
-
-  // --- Handle Request ---
   window.handleRequest = async function(id, status) {
-    await fetch(`${API_BASE}/requests/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status })
-    });
-    loadRequests();
-    loadNeeds(); // refresh if new request accepted
+    try {
+      const res = await fetch(`${API_BASE}/requests/${id}`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      });
+      await res.json();
+      await loadRequests(); await loadNeeds();
+    } catch (err) { console.error(err); }
   };
 
-  loadNeeds();
-  loadRequests();
+  window.removeRequest = async function(id) {
+    if (!confirm("Delete this request?")) return;
+    await fetch(`${API_BASE}/requests/${id}`, { method: "DELETE" });
+    await loadRequests();
+  };
+
+  sortNeeds.addEventListener("change", loadNeeds);
+  sortRequests.addEventListener("change", loadRequests);
+
+  window.exportToPDF = async function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("NeedsConnect Manager Report", 10, 10);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 20);
+    doc.text("Needs Summary:", 10, 30);
+    const rows = Array.from(document.querySelectorAll("#needsTable tbody tr")).map(tr => Array.from(tr.children).slice(0,6).map(td=>td.innerText));
+    let y=40; rows.forEach(r=>{ doc.text(r.join(" | "),10,y); y+=8; if(y>270){doc.addPage();y=20;}});
+    doc.addPage();
+    doc.text("Requests Summary:",10,20);
+    const rows2 = Array.from(document.querySelectorAll("#requestsTable tbody tr")).map(tr => Array.from(tr.children).slice(0,5).map(td=>td.innerText));
+    y=30; rows2.forEach(r=>{ doc.text(r.join(" | "),10,y); y+=8; if(y>270){doc.addPage();y=20;}});
+    doc.save("NeedsConnect_Report.pdf");
+  };
+
+  window.exportToExcel = async function() {
+    const wb = XLSX.utils.book_new();
+    const needsData = XLSX.utils.table_to_sheet(document.getElementById("needsTable"));
+    const requestsData = XLSX.utils.table_to_sheet(document.getElementById("requestsTable"));
+    XLSX.utils.book_append_sheet(wb, needsData, "Needs");
+    XLSX.utils.book_append_sheet(wb, requestsData, "Requests");
+    XLSX.writeFile(wb, "NeedsConnect_Report.xlsx");
+  };
+
+  loadNeeds(); loadRequests();
 };
 </script>
 </body>
