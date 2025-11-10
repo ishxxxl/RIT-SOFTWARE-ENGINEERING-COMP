@@ -77,9 +77,8 @@ app.delete("/api/needs/:id", (req, res) => {
 });
 
 /* ==============================
-    DONATION UPDATE ROUTE
+    DONATION UPDATE ROUTE (FIXED)
    ============================== */
-// ✅ Works with your existing table (no new columns)
 app.post("/api/needs/:id/donate", (req, res) => {
   const { id } = req.params;
   const { amount } = req.body;
@@ -88,7 +87,7 @@ app.post("/api/needs/:id/donate", (req, res) => {
     return res.status(400).json({ error: "Invalid donation amount" });
   }
 
-  // Fetch the current amount
+  // ✅ Fetch current amount_needed
   const selectSql = "SELECT amount_needed FROM needs WHERE id = ?";
   db.query(selectSql, [id], (err, results) => {
     if (err || results.length === 0) {
@@ -97,9 +96,10 @@ app.post("/api/needs/:id/donate", (req, res) => {
     }
 
     const currentAmount = parseFloat(results[0].amount_needed);
-    const newAmount = Math.max(0, currentAmount - parseFloat(amount));
+    const donation = parseFloat(amount);
+    const newAmount = Math.max(0, currentAmount - donation);
 
-    // Update only amount_needed
+    // ✅ Update amount_needed
     const updateSql = "UPDATE needs SET amount_needed = ? WHERE id = ?";
     db.query(updateSql, [newAmount, id], (updateErr) => {
       if (updateErr) {
@@ -107,9 +107,15 @@ app.post("/api/needs/:id/donate", (req, res) => {
         return res.status(500).json({ error: "Failed to update donation" });
       }
 
-      res.json({
-        message: "Donation recorded successfully",
-        updated: { id, amount_needed: newAmount },
+      // ✅ Return updated record for frontend refresh
+      db.query("SELECT * FROM needs WHERE id = ?", [id], (fetchErr, updated) => {
+        if (fetchErr || updated.length === 0) {
+          return res.json({ message: "Donation recorded." });
+        }
+        res.json({
+          message: "Donation recorded successfully",
+          updated: updated[0],
+        });
       });
     });
   });
