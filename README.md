@@ -66,6 +66,9 @@ NeedsConnect is a web platform designed to connect people in need with helpers w
 
 3. Update server.js with your MySQL credentials.
 
+## Class Diagram
+![Class Diagram](docs/Class-Diagram.png)
+
 ## API Routes:
 
 - GET /api/needs – Retrieve all needs
