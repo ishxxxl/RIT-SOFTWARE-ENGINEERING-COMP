@@ -552,10 +552,10 @@ async function checkoutBasket(){
     basket = [];
     hideBasket();
     await loadNeeds();
-    alert("✅ Thank you! Your donation(s) were recorded.");
+    alert("Thank you! Your donation(s) were recorded.");
   } catch (e) {
     console.error(e);
-    alert("❌ Something went wrong while checking out. Please try again.");
+    alert("Something went wrong while checking out. Please try again.");
   }
 }
 
