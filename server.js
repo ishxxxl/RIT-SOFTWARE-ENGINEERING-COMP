@@ -229,9 +229,9 @@ app.get("/api/helper/needs", (req, res) => {
 });
 
 /* ==============================
-   🚀 START SERVER
+    START SERVER
    ============================== */
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
