@@ -5,7 +5,6 @@
   <title>NeedsConnect - Helper Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ========== BASE STYLING ========== */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -27,7 +26,6 @@
       top: 0;
       z-index: 100;
     }
-
     header h1 img { height: 40px; }
     header .header-buttons { display: flex; gap: 10px; }
     header button {
@@ -77,9 +75,7 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* ========== NEEDS DISPLAY ========== */
     .needs-top { display: flex; gap: 25px; margin-bottom: 40px; align-items: stretch; }
-
     .main-need {
       flex: 2; position: relative; height: 400px;
       overflow: hidden; border-radius: 16px;
@@ -106,6 +102,19 @@
     .main-need .overlay button {
       background: #00a86b; border: none; padding: 10px 18px; border-radius: 6px;
       color: white; font-size: 16px; cursor: pointer;
+    }
+
+    /* Deadline Warning */
+    .deadline-warning {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255, 0, 0, 0.9);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
     .other-needs {
@@ -138,6 +147,42 @@
       cursor: pointer; color: white; font-size: 13px;
     }
 
+    /* View More button */
+    .view-more-btn {
+      display: block;
+      margin: 10px auto 40px auto;
+      background: linear-gradient(135deg, #00bfa6, #007a65);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .view-more-btn:hover {
+      background: linear-gradient(135deg, #00e4c7, #009b7e);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Modal */
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      justify-content: center; align-items: center; z-index: 200;
+    }
+    .modal-content {
+      background: white; padding: 25px; border-radius: 12px;
+      width: 80%; max-height: 80vh; overflow-y: auto;
+    }
+    .modal-content h3 { text-align: center; color: #004d3f; margin-bottom: 15px; }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
     footer {
       background: #006f57;
       color: #f9f9f9;
@@ -145,28 +190,31 @@
       padding: 20px 0;
     }
 
-    /* ========== MODALS ========== */
-    .modal {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-      justify-content: center; align-items: center; z-index: 200;
+    /* --- Donate modal (preset buttons) --- */
+    .preset-btn{
+      background:#e6f8f2;border:2px solid #00a86b;border-radius:20px;
+      padding:8px 16px;color:#007a65;cursor:pointer;font-weight:600;
+      transition:all .25s ease;
     }
-    .modal-content {
-      background: white; padding: 25px; border-radius: 10px;
-      width: 300px; max-width: 90%; text-align: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-    .modal-content h3 { margin-bottom: 15px; color: #004d3f; }
-    .modal-content input {
-      width: 90%; padding: 8px; margin-bottom: 15px;
-      border: 1px solid #ccc; border-radius: 5px;
-    }
-    .modal-content button {
-      background: #00896b; border: none; color: white;
-      padding: 8px 14px; margin: 4px; border-radius: 6px; cursor: pointer;
-    }
+    .preset-btn:hover,.preset-btn.active{background:#00a86b;color:#fff;transform:scale(1.05);}
 
-    .basket-list { text-align: left; margin-top: 10px; }
-    .basket-list div { margin: 5px 0; }
+    /* --- Basket popover (near the button) --- */
+    #basketPopover{
+      position: fixed; display:none; z-index: 250;
+      background:#fff; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,.2);
+      width: 360px; padding:16px;
+      border:1px solid #e9ecef;
+      margin-right: 20px;
+      margin-top: 5px;    
+    }
+    #basketPopover h4{ margin: 6px 0 12px; color:#004d3f;}
+    .basket-line{ display:flex; justify-content:space-between; align-items:center; margin:6px 0;}
+    .basket-name{ font-weight:600; color:#333;}
+    .basket-amt{ color:#006f57;}
+    .basket-total{ margin-top:10px; border-top:1px dashed #ddd; padding-top:10px;}
+    .basket-actions{ display:flex; gap:8px; margin-top:12px; }
+    .btn-lite{ background:#f1f5f4; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;}
+    .btn-lite:hover{ background:#e7eeec; }
   </style>
 </head>
 <body>
@@ -174,7 +222,7 @@
 <header>
   <h1><img src="Logo.jpg" alt="NeedsConnect Logo"></h1>
   <div class="header-buttons">
-    <button onclick="openBasket()">View Basket</button>
+    <button id="basketBtn" onclick="toggleBasket()">View Basket</button>
     <button onclick="location.href='request.html'">Request Need</button>
     <button onclick="logout()">Logout</button>
   </div>
@@ -186,8 +234,8 @@
   <div class="sort-section">
     <label for="sortNeeds">Sort by:</label>
     <select id="sortNeeds">
+      <option value="deadlineAsc" selected>Deadline (Nearest → Farthest)</option>
       <option value="priorityDesc">Priority (High → Low)</option>
-      <option value="deadlineAsc">Deadline (Nearest → Farthest)</option>
       <option value="amountDesc">Amount (High → Low)</option>
       <option value="amountAsc">Amount (Low → High)</option>
     </select>
@@ -197,64 +245,108 @@
     <div class="main-need" id="mainNeed"></div>
     <div class="other-needs" id="otherNeeds"></div>
   </div>
+
+  <button class="view-more-btn" onclick="openCategoryModal()">View More in This Category</button>
 </div>
 
-<!-- Donation Modal -->
-<div id="donationModal" class="modal">
+<div id="categoryModal" class="modal">
   <div class="modal-content">
-    <h3 id="donationTitle"></h3>
-    <input type="number" id="donationAmount" placeholder="Enter amount" min="1">
-    <div>
-      <button onclick="addToBasket()">Add to Basket</button>
-      <button onclick="closeModal('donationModal')">Cancel</button>
+    <h3 id="categoryTitle"></h3>
+    <div class="modal-grid" id="categoryGrid"></div>
+    <button class="view-more-btn" onclick="closeModal('categoryModal')">Close</button>
+  </div>
+</div>
+
+<!-- ✅ Donate Modal -->
+<div id="donateModal" class="modal">
+  <div class="modal-content" style="max-width:420px;">
+    <h3 id="donateTitle">Donate to Need</h3>
+    <p style="font-size:14px; color:#555; margin-top:5px; text-align:center;">
+      Choose an amount or enter your own:
+    </p>
+    <div id="presetAmounts" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:15px 0;">
+      <button class="preset-btn" data-amount="10">$10</button>
+      <button class="preset-btn" data-amount="20">$20</button>
+      <button class="preset-btn" data-amount="50">$50</button>
+      <button class="preset-btn" data-amount="100">$100</button>
+    </div>
+    <input type="number" id="donateAmount" placeholder="Or enter custom amount" min="1"
+      style="padding:10px; width:80%; margin:10px auto; display:block; border-radius:8px; border:1px solid #ccc; font-size:15px;">
+    <div style="margin-top:15px; display:flex; gap:10px; justify-content:center;">
+      <button class="view-more-btn" id="confirmDonate" style="margin:0;">Donate</button>
+      <button class="btn-lite" onclick="closeModal('donateModal')">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- Basket Modal -->
-<div id="basketModal" class="modal">
-  <div class="modal-content">
-    <h3>Your Basket</h3>
-    <div class="basket-list" id="basketList"></div>
-    <p><strong>Total: $<span id="basketTotal">0</span></strong></p>
-    <button onclick="checkout()">Checkout</button>
-    <button onclick="closeModal('basketModal')">Close</button>
+<!-- ✅ Basket Popover (near the View Basket button) -->
+<div id="basketPopover" role="dialog" aria-label="Donation Basket">
+  <h4>🧺 Donation Basket</h4>
+  <div id="basketList"></div>
+  <div class="basket-total">
+    <div class="basket-line"><span>Subtotal</span><span id="subtotalVal" class="basket-amt">$0.00</span></div>
+    <div class="basket-line"><span>VAT (5%)</span><span id="vatVal" class="basket-amt">$0.00</span></div>
+    <div class="basket-line" style="font-weight:700;"><span>Total</span><span id="totalVal" class="basket-amt">$0.00</span></div>
+  </div>
+  <div class="basket-actions">
+    <button class="btn-lite" onclick="clearBasket()">Clear</button>
+    <button class="view-more-btn" style="margin:0;" onclick="checkoutBasket()">Checkout</button>
+    <button class="btn-lite" onclick="hideBasket()">Close</button>
   </div>
 </div>
 
 <footer>© 2025 NeedsConnect | Empowering Communities</footer>
 
 <script>
-if (!localStorage.getItem("user")) window.location.href = "login.html";
-
+/* ========= State & constants ========= */
 let allNeeds = [];
 let activeCategory = null;
-let basket = JSON.parse(localStorage.getItem("basket")) || [];
-let currentNeed = null;
+let basket = [];
+let selectedNeed = { id: null, name: null };
+const VAT_RATE = 0.05; // adjust if needed for your locale
+const API_BASE = "http://localhost:5000";
+const priorityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
 
+/* Track original amount_needed per need so progress can be calculated
+   (DB only stores remaining amount_needed) */
+const originalNeededMap = {}; // { [id]: original_amount_needed }
+
+/* ========= Elements ========= */
 const mainNeedDiv = document.getElementById("mainNeed");
 const otherNeedsDiv = document.getElementById("otherNeeds");
 const categoryMenuDiv = document.getElementById("categoryMenu");
 const sortSelect = document.getElementById("sortNeeds");
+const categoryModal = document.getElementById("categoryModal");
+const categoryTitle = document.getElementById("categoryTitle");
+const categoryGrid = document.getElementById("categoryGrid");
 
-const donationModal = document.getElementById("donationModal");
-const basketModal = document.getElementById("basketModal");
-const donationTitle = document.getElementById("donationTitle");
-const donationAmountInput = document.getElementById("donationAmount");
+const donateModal = document.getElementById("donateModal");
+const basketBtn = document.getElementById("basketBtn");
+const basketPopover = document.getElementById("basketPopover");
 const basketList = document.getElementById("basketList");
-const basketTotal = document.getElementById("basketTotal");
+const subtotalVal = document.getElementById("subtotalVal");
+const vatVal = document.getElementById("vatVal");
+const totalVal = document.getElementById("totalVal");
 
-const priorityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
-
+/* ========= Load needs from API ========= */
 async function loadNeeds() {
-  const res = await fetch("http://localhost:5000/api/needs");
+  const res = await fetch(`${API_BASE}/api/needs`);
   allNeeds = await res.json();
-  const categories = [...new Set(allNeeds.map(n => n.category))];
-  activeCategory = activeCategory || categories[0];
-  renderCategories(categories);
+
+  // Set originals once (do not overwrite, so progress persists during session)
+  allNeeds.forEach(n => {
+    if (originalNeededMap[n.id] == null) {
+      originalNeededMap[n.id] = Number(n.amount_needed) || 0;
+    }
+  });
+
+  allNeeds.sort((a, b) => new Date(a.deadline || Infinity) - new Date(b.deadline || Infinity));
+  activeCategory = activeCategory || [...new Set(allNeeds.map(n => n.category))][0];
+  renderCategories([...new Set(allNeeds.map(n => n.category))]);
   renderNeeds();
 }
 
+/* ========= UI: categories, sorting ========= */
 function renderCategories(categories) {
   categoryMenuDiv.innerHTML = "";
   categories.forEach(cat => {
@@ -278,111 +370,208 @@ function sortNeedsData(needs, sortType) {
   });
 }
 
+function daysLeft(deadline) {
+  if (!deadline) return null;
+  const now = new Date();
+  const end = new Date(deadline);
+  const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+  return diff >= 0 ? diff : null;
+}
+
+/* ========= Render needs ========= */
 function renderNeeds() {
   const needs = sortNeedsData(allNeeds.filter(n => n.category === activeCategory), sortSelect.value);
   if (!needs.length) return mainNeedDiv.innerHTML = "<p>No needs available.</p>";
-
   const [first, ...others] = needs;
   renderMain(first);
   renderOthers(others.slice(0, 4));
 }
 
+function percentFundedFromRemaining(n) {
+  const original = Math.max(1, Number(originalNeededMap[n.id]) || 1);
+  const remaining = Number(n.amount_needed) || 0;
+  const funded = Math.max(0, original - remaining);
+  return Math.min(100, Math.round((funded / original) * 100));
+}
+
 function renderMain(n) {
-  const percent = Math.min(100, Math.round((n.amount_fulfilled / (n.amount_fulfilled + n.amount_needed)) * 100) || 0);
+  const percent = percentFundedFromRemaining(n);
+  const days = daysLeft(n.deadline);
+  const urgentTag = (days !== null && days <= 7) ? `<div class='deadline-warning'>${days} day${days!==1?'s':''} left!</div>` : "";
   mainNeedDiv.innerHTML = `
     <img src="${n.image_url}" alt="${n.name}">
+    ${urgentTag}
     <div class="name-label">${n.name} — $${n.amount_needed}</div>
     <div class="overlay">
       <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
-      <small>${percent}% funded</small>
-      <button onclick="openDonation(${n.id}, '${n.name}', ${n.amount_needed})">Donate</button>
+      <small>${percent}% funded · Remaining $${Number(n.amount_needed).toFixed(2)}</small>
+      <button onclick="openDonation(${n.id}, '${n.name}')">Donate</button>
     </div>`;
 }
 
 function renderOthers(needs) {
   otherNeedsDiv.innerHTML = "";
   needs.forEach(n => {
-    const percent = Math.min(100, Math.round((n.amount_fulfilled / (n.amount_fulfilled + n.amount_needed)) * 100) || 0);
+    const percent = percentFundedFromRemaining(n);
+    const days = daysLeft(n.deadline);
+    const urgentTag = (days !== null && days <= 7) ? `<div class='deadline-warning'>${days} day${days!==1?'s':''} left!</div>` : "";
     const div = document.createElement("div");
     div.className = "need-card";
     div.innerHTML = `
       <img src="${n.image_url}" alt="${n.name}">
+      ${urgentTag}
       <div class="name-label">${n.name} — $${n.amount_needed}</div>
       <div class="overlay">
         <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
-        <small>${percent}% funded</small>
-        <button onclick="openDonation(${n.id}, '${n.name}', ${n.amount_needed})">Donate</button>
+        <small>${percent}% funded · Remaining $${Number(n.amount_needed).toFixed(2)}</small>
+        <button onclick="openDonation(${n.id}, '${n.name}')">Donate</button>
       </div>`;
     otherNeedsDiv.appendChild(div);
   });
 }
 
-/* ========== DONATION MODAL ========== */
-function openDonation(id, name, amountLeft) {
-  currentNeed = { id, name, amountLeft };
-  donationTitle.textContent = `Donate to ${name}`;
-  donationAmountInput.value = "";
-  donationModal.style.display = "flex";
+/* ========= Category modal ========= */
+function openCategoryModal() {
+  const needs = allNeeds.filter(n => n.category === activeCategory);
+  categoryTitle.textContent = `All Needs in ${activeCategory}`;
+  categoryGrid.innerHTML = "";
+  needs.forEach(n => {
+    const percent = percentFundedFromRemaining(n);
+    const days = daysLeft(n.deadline);
+    const urgentTag = (days !== null && days <= 7) ? `<div class='deadline-warning'>${days} day${days!==1?'s':''} left!</div>` : "";
+    const card = document.createElement("div");
+    card.className = "need-card";
+    card.innerHTML = `
+      <img src="${n.image_url}" alt="${n.name}">
+      ${urgentTag}
+      <div class="name-label">${n.name} — $${n.amount_needed}</div>
+      <div class="overlay">
+        <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
+        <small>${percent}% funded · Remaining $${Number(n.amount_needed).toFixed(2)}</small>
+        <button onclick="openDonation(${n.id}, '${n.name}')">Donate</button>
+      </div>`;
+    categoryGrid.appendChild(card);
+  });
+  categoryModal.style.display = "flex";
 }
 
 function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
 
-/* ========== BASKET ========== */
-function addToBasket() {
-  const amount = parseFloat(donationAmountInput.value);
-  if (!amount || amount <= 0) return alert("Enter a valid amount.");
-  basket.push({ ...currentNeed, amount });
-  localStorage.setItem("basket", JSON.stringify(basket));
-  closeModal("donationModal");
-  alert("Added to basket!");
+/* ========= Donate popup logic ========= */
+function openDonation(id, name) {
+  selectedNeed = { id, name };
+  document.getElementById("donateTitle").textContent = `Donate to ${name}`;
+  const donateInput = document.getElementById("donateAmount");
+  donateInput.value = "";
+  document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+  donateModal.style.display = "flex";
 }
 
-function openBasket() {
-  basketModal.style.display = "flex";
-  renderBasket();
-}
-
-function renderBasket() {
-  basketList.innerHTML = "";
-  let total = 0;
-  basket.forEach((item, i) => {
-    total += item.amount;
-    const div = document.createElement("div");
-    div.innerHTML = `${item.name}: $${item.amount.toFixed(2)} <button onclick="removeFromBasket(${i})">x</button>`;
-    basketList.appendChild(div);
+// preset buttons fill the input
+document.querySelectorAll(".preset-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("donateAmount").value = btn.dataset.amount;
   });
-  basketTotal.textContent = total.toFixed(2);
+});
+
+document.getElementById("confirmDonate").onclick = () => {
+  const amount = parseFloat(document.getElementById("donateAmount").value);
+  if (isNaN(amount) || amount <= 0) return alert("Please select or enter a valid donation amount!");
+  basket.push({ id: selectedNeed.id, name: selectedNeed.name, amount });
+  closeModal("donateModal");
+  showBasketNearButton();
+};
+
+/* ========= Basket popover ========= */
+function toggleBasket(){
+  if (basketPopover.style.display === "none" || basketPopover.style.display === "") {
+    showBasketNearButton();
+  } else {
+    hideBasket();
+  }
 }
 
-function removeFromBasket(i) {
-  basket.splice(i, 1);
-  localStorage.setItem("basket", JSON.stringify(basket));
+function hideBasket(){
+  basketPopover.style.display = "none";
+}
+
+function showBasketNearButton(){
+  renderBasket();
+  // Anchor near the "View Basket" button
+  const rect = basketBtn.getBoundingClientRect();
+  const top = rect.bottom + 8; // a bit below the button
+  const left = Math.min(rect.left, window.innerWidth - 380); // avoid overflow
+  basketPopover.style.top = `${top}px`;
+  basketPopover.style.left = `${left}px`;
+  basketPopover.style.display = "block";
+}
+
+function renderBasket(){
+  if (!basket.length) {
+    basketList.innerHTML = `<p style="color:#666; margin:8px 0;">No donations added yet.</p>`;
+  } else {
+    basketList.innerHTML = basket.map((b, idx) => `
+      <div class="basket-line">
+        <span class="basket-name">${b.name}</span>
+        <span class="basket-amt">$${Number(b.amount).toFixed(2)}</span>
+      </div>
+    `).join("");
+  }
+  const subtotal = basket.reduce((s,b)=> s + Number(b.amount||0), 0);
+  const vat = subtotal * VAT_RATE;
+  const total = subtotal + vat;
+  subtotalVal.textContent = `$${subtotal.toFixed(2)}`;
+  vatVal.textContent = `$${vat.toFixed(2)}`;
+  totalVal.textContent = `$${total.toFixed(2)}`;
+}
+
+function clearBasket(){
+  basket = [];
   renderBasket();
 }
 
-/* ========== CHECKOUT ========== */
-async function checkout() {
-  if (!basket.length) return alert("Your basket is empty.");
-  for (const donation of basket) {
-    await fetch(`http://localhost:5000/api/needs/${donation.id}/donate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: donation.amount })
-    });
+/* ========= Checkout (DB update + refresh) ========= */
+async function checkoutBasket(){
+  if (!basket.length) {
+    alert("Your basket is empty.");
+    return;
   }
-  alert("Donation successful!");
-  basket = [];
-  localStorage.removeItem("basket");
-  closeModal("basketModal");
-  await loadNeeds();
+  try {
+    for (const item of basket) {
+      await fetch(`${API_BASE}/api/needs/${item.id}/donate`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ amount: item.amount })
+      });
+    }
+    // Successfully recorded; now reload needs and refresh UI
+    basket = [];
+    hideBasket();
+    await loadNeeds();
+    alert("✅ Thank you! Your donation(s) were recorded.");
+  } catch (e) {
+    console.error(e);
+    alert("❌ Something went wrong while checking out. Please try again.");
+  }
 }
 
-/* ========== GENERAL ========== */
+/* ========= Misc ========= */
+function logout(){ localStorage.removeItem("user"); window.location.href="login.html"; }
 sortSelect.addEventListener("change", renderNeeds);
-function logout() { localStorage.removeItem("user"); window.location.href = "login.html"; }
+
+/* Initial load */
 loadNeeds();
+
+/* Close popover if clicking elsewhere */
+document.addEventListener("click", (e)=>{
+  if (!basketPopover.contains(e.target) && e.target !== basketBtn) {
+    hideBasket();
+  }
+});
 </script>
 </body>
 </html>
