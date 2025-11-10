@@ -26,12 +26,15 @@ NeedsConnect is a web platform designed to connect people in need with helpers w
    git clone https://github.com/yourusername/NeedsConnect.git
 
 2. Navigate to the project directory:
+   ```bash
    cd NeedsConnect
    
 3. Install dependencies:
+   ```bash
    npm install
 
 4. Start the server:
+   ```bash
    node server.js
 
 5. Open helper.html or request.html in your browser.
@@ -40,26 +43,26 @@ NeedsConnect is a web platform designed to connect people in need with helpers w
 
 1. Create a MySQL database named needsconnect.
 2. Create the necessary tables for needs and requests:
+   ```sql
+   CREATE TABLE needs (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     name VARCHAR(255),
+     description TEXT,
+     category VARCHAR(100),
+     amount_needed DECIMAL(10,2),
+     priority VARCHAR(50),
+     deadline DATE,
+     image_url VARCHAR(255)
+   );
 
-CREATE TABLE needs (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255),
-  description TEXT,
-  category VARCHAR(100),
-  amount_needed DECIMAL(10,2),
-  priority VARCHAR(50),
-  deadline DATE,
-  image_url VARCHAR(255)
-);
-
-CREATE TABLE requests (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255),
-  description TEXT,
-  category VARCHAR(100),
-  amount_needed DECIMAL(10,2),
-  status VARCHAR(50)
-);
+   CREATE TABLE requests (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     name VARCHAR(255),
+     description TEXT,
+     category VARCHAR(100),
+     amount_needed DECIMAL(10,2),
+     status VARCHAR(50)
+   );
 
 3. Update server.js with your MySQL credentials.
 
