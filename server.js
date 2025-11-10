@@ -24,7 +24,7 @@ db.connect((err) => {
 });
 
 /* ==============================
-   📦 NEEDS TABLE ROUTES
+    NEEDS TABLE ROUTES
    ============================== */
 
 // Get all needs
@@ -77,7 +77,7 @@ app.delete("/api/needs/:id", (req, res) => {
 });
 
 /* ==============================
-   💰 DONATION UPDATE ROUTE
+    DONATION UPDATE ROUTE
    ============================== */
 // ✅ Works with your existing table (no new columns)
 app.post("/api/needs/:id/donate", (req, res) => {
@@ -116,7 +116,7 @@ app.post("/api/needs/:id/donate", (req, res) => {
 });
 
 /* ==============================
-   📨 REQUESTS TABLE ROUTES
+    REQUESTS TABLE ROUTES
    ============================== */
 
 // Get all requests
@@ -208,7 +208,7 @@ app.delete("/api/requests/:id", (req, res) => {
 });
 
 /* ==============================
-   🧑‍🤝‍🧑 HELPER ROUTES
+    HELPER ROUTES
    ============================== */
 
 app.get("/api/helper/needs", (req, res) => {
