@@ -81,6 +81,10 @@ NeedsConnect is a web platform designed to connect people in need with helpers w
 - Requesters: Submit new needs for review and approval.
 - Admin: Approve or decline requests to add them to the needs list.
 
+## Code Comments:
+
+All main files, including server.js and the HTML pages, contain explanatory comments above major functions and logical sections to make the flow of the code easier to understand.
+
 ## Author:
 
 Created By Ishaal Shermin, Samiullah Iftikhar, Hussain Ali Syed
